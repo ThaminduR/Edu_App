@@ -1,6 +1,6 @@
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/Datalayer/classes/Database.dart';
-import 'package:edu_app/UI/Paper UI/paperScreen.dart';
+import 'package:edu_app/UI/Paper UI/quizLoadScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

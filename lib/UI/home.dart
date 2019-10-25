@@ -1,7 +1,7 @@
 import 'package:edu_app/UI/aboutus.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/leaderboard.dart';
-import 'package:edu_app/UI/Paper UI/paperview.dart';
+import 'package:edu_app/UI/Paper UI/paperListView.dart';
 import 'package:edu_app/UI/progress.dart';
 import 'package:edu_app/UI/settings.dart';
 import 'package:flutter/material.dart';

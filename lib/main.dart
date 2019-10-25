@@ -1,7 +1,7 @@
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/home.dart';
 import 'package:edu_app/UI/Onboarding/onboarding.dart';
-import 'package:edu_app/UI/Paper UI/paperScreen.dart';
+import 'package:edu_app/UI/Paper UI/quizLoadScreen.dart';
 import 'package:edu_app/UI/splash.dart';
 import 'package:flutter/material.dart';
 // import 'Datalayer/models/connectivity.dart';
