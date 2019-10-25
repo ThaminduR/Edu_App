@@ -18,7 +18,6 @@ class PaperPageRoute extends CupertinoPageRoute {
 }
 
 class PaperPage extends StatelessWidget {
-  bool isOffline = false;
   final Database db = new Database();
   @override
   Widget build(BuildContext context) {
@@ -45,10 +44,10 @@ class PaperPage extends StatelessWidget {
           future: db.getPapers(),
           builder: (context, paperSnap) {
             switch (paperSnap.connectionState) {
-              case ConnectionState.none:
+              case ConnectionState.none: //if there's no papers in database
                 return Text('No Papers to show');
               case ConnectionState.active:
-              case ConnectionState.waiting:
+              case ConnectionState.waiting: //show while papers are loading
                 return Padding(
                   padding: EdgeInsets.fromLTRB(
                     size.width * 0.35,
@@ -63,8 +62,7 @@ class PaperPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(
-                        color: AppColor.colors[1].color,
-                        //color: Color.fromRGBO(36, 209, 99, 0.9),
+                        color: Colors.white,
                       ),
                       color: Colors.white,
                     ),
@@ -108,7 +106,7 @@ Widget buildPapers(context, size, paper) {
       ),
       child: ExpansionTile(
         title: Text(
-          'පෙරහුරු ප්‍රශ්න ප්‍රත්‍ර අංක ${paper.number}', // paper id here
+          'Question Paper ${paper.number}', // paper id here
           style: TextStyle(
             color: AppColor.colors[1].color,
             fontSize: size.height * 0.02,
@@ -116,7 +114,7 @@ Widget buildPapers(context, size, paper) {
         ),
         children: [
           Text(
-            'කාලය : පැය ${paper.hTime} මිනිත්තු ${paper.mTime}',
+            'Time : ${paper.hTime}h ${paper.mTime}m',
             style: TextStyle(
               color: AppColor.colors[1].color,
             ),
@@ -142,7 +140,7 @@ Widget createButton(paper, context) {
   return FlatButton(
     color: Colors.white,
     child: Text(
-      'ප්‍රශ්න පත්‍රය කරන්න',
+      'Do the paper',
       style: TextStyle(
         color: AppColor.colors[1].color,
       ),
@@ -159,20 +157,22 @@ Widget createButton(paper, context) {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
             ),
-            content: Text('ප්‍රශ්ණ පත්‍රය කිරීමට ඔබ සූදානම්ද ?'),
+            content: Text(
+                "Are you ready ?"), //Text('ප්‍රශ්ණ පත්‍රය කිරීමට ඔබ සූදානම්ද ?'),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, PaperScreen.routeName,
                       arguments: paper);
                 },
-                child: Text('ඔව්'),
+                child: Text("Yes, Proceed"), //Text('ඔව්'),
               ),
               FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('නැහැ')),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("No"), //Text('නැහැ'),
+              ),
             ],
           );
         },
