@@ -14,12 +14,13 @@ void main() {
     MaterialApp(
       title: "පහේ පන්තිය",
       theme: ThemeData(
+          //Colors are defined in AppColor class
           primaryColor: AppColor.colors[0].color,
           primaryColorDark: AppColor.colors[0].color),
       initialRoute: '/',
       routes: {
-        '/': (context) => Splash(),
-        '/onBoarding': (context) => OnBoardingPage(),
+        '/': (context) => Splash(), //Splash screen determines whether to show onboarding or home
+        '/onBoarding': (context) => OnBoardingPage(), //Onboarding is showed only once. Implemented using saved preferences
         '/home': (context) => HomePage(),
         PaperScreen.routeName: (context) => PaperScreen(),
       },
