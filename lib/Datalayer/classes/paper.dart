@@ -29,17 +29,17 @@ class Paper {
   }
 
   void saveAnswers(answers, correct) {
-    Database db = new Database();
+    Database db = Database.getdb();
     db.uploadAnswers(this, answers, correct);
   }
 
   void updateScore(user, correct) {
-    Database db = new Database();
+    Database db = Database.getdb();
     db.updateLeaderboard(user, correct);
   }
 
   Future<bool> checkFirstTime(user) async {
-    Database db = new Database();
+    Database db = Database.getdb();
     return await db.firstTime(user, this.id);
   }
 

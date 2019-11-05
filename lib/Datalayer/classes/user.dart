@@ -28,6 +28,6 @@ class User {
   }
 
   void savePaperMarks(paper, answers, marks) {
-    Database db = Database();
+    Database db = Database.getdb();
   }
 }

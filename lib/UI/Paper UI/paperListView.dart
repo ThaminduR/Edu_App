@@ -1,5 +1,5 @@
 import 'package:edu_app/UI/colors.dart';
-import 'package:edu_app/Datalayer/classes/Database.dart';
+import 'package:edu_app/Controllers/paperController.dart';
 import 'package:edu_app/UI/Paper UI/quizLoadScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class PaperPageRoute extends CupertinoPageRoute {
 }
 
 class PaperPage extends StatelessWidget {
-  final Database db = new Database();
+  final PaperController paperController = new PaperController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size; //Get current device size
@@ -41,7 +41,8 @@ class PaperPage extends StatelessWidget {
           ),
         ),
         child: FutureBuilder(
-          future: db.getPapers(),
+          future: paperController
+              .getPapers(), //call controller to get data from database
           builder: (context, paperSnap) {
             switch (paperSnap.connectionState) {
               case ConnectionState.none: //if there's no papers in database
@@ -146,7 +147,9 @@ Widget createButton(paper, context) {
       ),
     ),
     onPressed: () async {
+      //checkPaper method of PaperSHowcase object is called
       if (!(await paper.checkPaper(paper.name))) {
+        //if paper not in local stoarage it will be downloaded
         await paper.downloadFile(paper.url, paper.name);
       }
       return showDialog(
@@ -157,21 +160,20 @@ Widget createButton(paper, context) {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25.0),
             ),
-            content: Text(
-                "Are you ready ?"), //Text('ප්‍රශ්ණ පත්‍රය කිරීමට ඔබ සූදානම්ද ?'),
+            content: Text("Are you ready ?"),
             actions: <Widget>[
               FlatButton(
                 onPressed: () {
                   Navigator.pushReplacementNamed(context, PaperScreen.routeName,
                       arguments: paper);
                 },
-                child: Text("Yes, Proceed"), //Text('ඔව්'),
+                child: Text("Yes"),
               ),
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text("No"), //Text('නැහැ'),
+                child: Text("No"),
               ),
             ],
           );

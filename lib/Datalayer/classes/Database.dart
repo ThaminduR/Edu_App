@@ -5,6 +5,14 @@ import 'package:edu_app/Datalayer/classes/user.dart';
 class Database {
   // Access a Cloud Firestore instance from your Activity
   final databaseReference = Firestore.instance;
+  static Database database;
+
+static Database getdb(){
+  if (database ==null){
+    database = Database();
+  }
+  return database;
+}
 
 //fetch currently posted papers from database
   Future<List> getPapers() async {
