@@ -7,7 +7,6 @@ class OnBoardingPageState extends State<OnBoardingPage> {
   final List<Widget> introWidgetsList = <Widget>[
     Page1(),
     Page2(),
-    Page3(),
   ];
   final controller = new PageController();
   int currentPageValue;
@@ -19,65 +18,57 @@ class OnBoardingPageState extends State<OnBoardingPage> {
   }
 
   Widget buildScreens() {
-    return SafeArea(
-      child: Container(
-        child: Stack(
-          children: [
-            PageView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: introWidgetsList.length,
-              onPageChanged: (int page) {
-                getChangedPageAndMoveBar(page);
-              },
-              controller: controller,
-              itemBuilder: (context, index) {
-                return introWidgetsList[index];
-              },
-            ),
-            Stack(
-              children: <Widget>[
-                Container(
-                  margin: EdgeInsets.only(bottom: 35),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        for (int i = 0; i < introWidgetsList.length; i++)
-                          if (i == currentPageValue) ...[circleBar(true)] else
-                            circleBar(false),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Visibility(
-              visible: currentPageValue == introWidgetsList.length - 1
-                  ? true
-                  : false,
-              child: Align(
-                alignment: Alignment.center,
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 30.0, 30.0),
-                  child: FloatingActionButton.extended(
-                    onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/home');
-                    },
-                    backgroundColor: AppColor.colors[1].color,
-                    label: Text(
-                      'ආරම්භ කරන්න',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ), //Icon(Icons.arrow_forward),
+    return Container(
+      child: Stack(
+        children: [
+          PageView.builder(
+            physics: BouncingScrollPhysics(),
+            itemCount: introWidgetsList.length,
+            onPageChanged: (int page) {
+              getChangedPageAndMoveBar(page);
+            },
+            controller: controller,
+            itemBuilder: (context, index) {
+              return introWidgetsList[index];
+            },
+          ),
+          Stack(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(bottom: 35),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      for (int i = 0; i < introWidgetsList.length; i++)
+                        if (i == currentPageValue) ...[circleBar(true)] else
+                          circleBar(false),
+                    ],
                   ),
                 ),
               ),
+            ],
+          ),
+          Visibility(
+            visible:
+                currentPageValue == introWidgetsList.length - 1 ? true : false,
+            child: Align(
+              alignment: Alignment.bottomRight,
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0.0, 0.0, 30.0, 30.0),
+                child: FloatingActionButton.extended(
+                  onPressed: () {
+                    Navigator.pushReplacementNamed(context, '/home');
+                  },
+                  backgroundColor: AppColor.colors[1].color,
+                  label: Icon(Icons.arrow_forward),
+                ),
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

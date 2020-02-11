@@ -3,6 +3,7 @@ import 'package:edu_app/UI/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/UI/Onboarding/onboarding.dart';
+import 'package:edu_app/UI/Onboarding/login.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -13,10 +14,9 @@ class SplashState extends State<Splash> {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
-
     if (_seen) {
       Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => new HomePage()));
+          new MaterialPageRoute(builder: (context) => new LoginPage()));
     } else {
       prefs.setBool('seen', true);
       Navigator.of(context).pushReplacement(
