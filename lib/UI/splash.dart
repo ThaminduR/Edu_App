@@ -37,7 +37,6 @@ class SplashState extends State<Splash> {
     super.initState();
     PaperController paperController = new PaperController();
     paperController.savetoDB();
-    paperController.testPrintLocalPapers();
     new Timer(new Duration(milliseconds: 1000), () {
       checkFirstSeen();
     });

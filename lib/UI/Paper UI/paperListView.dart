@@ -4,7 +4,7 @@ import 'package:edu_app/UI/Paper UI/quizLoadScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-//This page is where all the papers are listed.
+//This page is where all the downloaded papers are listed.
 
 //Added cupertino ios routing animation through creating a routing class
 class PaperPageRoute extends CupertinoPageRoute {
@@ -19,13 +19,12 @@ class PaperPageRoute extends CupertinoPageRoute {
 
 class PaperPage extends StatelessWidget {
   final PaperController paperController = new PaperController();
-  bool downloading = true;
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size; //Get current device size
     return Scaffold(
       appBar: AppBar(
-        title: Text('Papers'),
+        title: Text('My Papers'),
       ),
       body: Container(
         decoration: BoxDecoration(
@@ -41,75 +40,61 @@ class PaperPage extends StatelessWidget {
             ],
           ),
         ),
-        child: Column(
-          children: [
-            Center(
-                child: downloading
-                    ? Container(
-                        height: size.height * 0.2,
-                        width: size.width * 0.1,
-                        child: Card(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              CircularProgressIndicator(),
-                              SizedBox(
-                                height: size.height * 0.02,
-                              ),
-                              Text("Downloding File")
-                            ],
-                          ),
-                        ),
-                      )
-                    : null),
-            FutureBuilder(
-              future: paperController
-                  .getPapers(), //call controller to get data from database
-              builder: (context, paperSnap) {
-                switch (paperSnap.connectionState) {
-                  case ConnectionState.none: //if there's no papers in database
-                    return Text('No Papers to show');
-                  case ConnectionState.active:
-                  case ConnectionState.waiting: //show while papers are loading
-                    return Padding(
-                      padding: EdgeInsets.fromLTRB(
-                        size.width * 0.35,
-                        size.height * 0.425,
-                        size.width * 0.35,
-                        size.height * 0.425,
+        child: FutureBuilder(
+          future: paperController
+              .getLocalPapers(), //call controller to get data from database
+          builder: (context, paperSnap) {
+            switch (paperSnap.connectionState) {
+              case ConnectionState.none: //if there's no papers in database
+                return Text('No Papers to show');
+              case ConnectionState.active:
+              case ConnectionState.waiting: //show while papers are loading
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    size.width * 0.35,
+                    size.height * 0.425,
+                    size.width * 0.35,
+                    size.height * 0.425,
+                  ),
+                  child: Container(
+                    alignment: Alignment.center,
+                    height: size.height * 0.05,
+                    width: size.width * 0.3,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(
+                        color: Colors.white,
                       ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: size.height * 0.05,
-                        width: size.width * 0.3,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Colors.white,
-                          ),
-                          color: Colors.white,
-                        ),
-                        child: Text('Loading Papers'),
-                      ),
-                    );
-                  case ConnectionState.done:
-                    if (paperSnap.hasError)
-                      return Text('Error: ${paperSnap.error}');
-                    return ListView.builder(
+                      color: Colors.white,
+                    ),
+                    child: Text('Loading Papers'),
+                  ),
+                );
+              case ConnectionState.done:
+                if (paperSnap.hasError)
+                  return Text('Error: ${paperSnap.error}');
+                if (paperSnap.data.length == 0) {
+                  return Center(
+                      child: Text(
+                    "You don't have any downloaded papers",
+                    style: TextStyle(
+                        color: Colors.white, fontSize: size.height * 0.02),
+                  ));
+                } else {
+                  return ListView.builder(
                       itemCount: paperSnap.data.length,
                       itemBuilder: (context, position) {
                         return buildPapers(
                           context,
                           size,
-                          paperSnap.data[position],
+                          paperSnap
+                              .data[(paperSnap.data.length - 1) - position],
                         ); //builds paper per item in the list from db
-                      },
-                    );
+                      });
                 }
-                return null; // unreachable
-              },
-            ),
-          ],
+            }
+            return null; // unreachable
+          },
         ),
       ),
     );
@@ -155,13 +140,40 @@ Widget buildPapers(context, size, paper) {
               child: FlatButton(
                 color: Colors.white,
                 child: Text(
-                  'Download paper',
+                  'Do the paper',
                   style: TextStyle(
                     color: AppColor.colors[1].color,
                   ),
                 ),
                 onPressed: () async {
-                  await paper.downloadFile(paper.url, paper.name);
+                  return showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                        ),
+                        content: Text("Are you ready ?"),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                  context, PaperScreen.routeName,
+                                  arguments: paper);
+                            },
+                            child: Text("Yes"),
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Text("No"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
             ),
@@ -171,34 +183,3 @@ Widget buildPapers(context, size, paper) {
     ),
   );
 }
-
-//checkPaper method of PaperSHowcase object is called
-//if (!(await paper.checkPaper(paper.name))) {
-
-// return showDialog(
-//   barrierDismissible: false,
-//   context: context,
-//   builder: (context) {
-//     return AlertDialog(
-//       shape: RoundedRectangleBorder(
-//         borderRadius: BorderRadius.circular(25.0),
-//       ),
-//       content: Text("Are you ready ?"),
-//       actions: <Widget>[
-//         FlatButton(
-//           onPressed: () {
-//             Navigator.pushReplacementNamed(context, PaperScreen.routeName,
-//                 arguments: paper);
-//           },
-//           child: Text("Yes"),
-//         ),
-//         FlatButton(
-//           onPressed: () {
-//             Navigator.pop(context);
-//           },
-//           child: Text("No"),
-//         ),
-//       ],
-//     );
-//   },
-// );

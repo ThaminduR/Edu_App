@@ -1,3 +1,4 @@
+import 'package:edu_app/UI/Paper%20UI/newPaperView.dart';
 import 'package:edu_app/UI/aboutus.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/leaderboard.dart';
@@ -65,7 +66,7 @@ class HomePageState extends State<HomePage> {
                                 height: size.height * 0.05,
                               ),
                               Icon(
-                                Icons.library_books,
+                                Icons.book,
                                 size: 30,
                                 color: Colors.white,
                               ),
@@ -82,7 +83,7 @@ class HomePageState extends State<HomePage> {
                               //   ),
                               // ),
                               Text(
-                                'Papers',
+                                'My Papers',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: size.height * 0.018,
@@ -104,7 +105,7 @@ class HomePageState extends State<HomePage> {
                         color: tileColor,
                         child: FlatButton(
                           onPressed: () {
-                            Navigator.of(context).push(ProgressPageRoute());
+                            Navigator.of(context).push(NewPaperPageRoute());
                           },
                           child: Column(
                             children: <Widget>[
@@ -112,24 +113,15 @@ class HomePageState extends State<HomePage> {
                                 height: size.height * 0.05,
                               ),
                               Icon(
-                                Icons.show_chart,
+                                Icons.library_books,
                                 size: 30,
                                 color: Colors.white,
                               ),
                               SizedBox(
                                 height: size.height * 0.02,
                               ),
-                              //Uncomment to display sinhala words
-                              // Text(
-                              //   'ප්‍රගතිය',
-                              //   textAlign: TextAlign.center,
-                              //   style: TextStyle(
-                              //     fontSize: size.height * 0.018,
-                              //     color: Colors.white,
-                              //   ),
-                              // ),
                               Text(
-                                'Progress',
+                                'New Papers',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: size.height * 0.018,
@@ -155,14 +147,16 @@ class HomePageState extends State<HomePage> {
                       child: Card(
                         color: tileColor,
                         child: FlatButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(ProgressPageRoute());
+                          },
                           child: Column(
                             children: <Widget>[
                               SizedBox(
                                 height: size.height * 0.05,
                               ),
                               Icon(
-                                Icons.book,
+                                Icons.show_chart,
                                 size: 30,
                                 color: Colors.white,
                               ),
@@ -179,7 +173,7 @@ class HomePageState extends State<HomePage> {
                               //   ),
                               // ),
                               Text(
-                                'Lessons',
+                                'Progress',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: size.height * 0.018,

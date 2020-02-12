@@ -24,7 +24,7 @@ class ProgressPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "මගේ ප්‍රගතිය | My Progress",
+            "My Progress",
           ),
         ),
         body: Container(

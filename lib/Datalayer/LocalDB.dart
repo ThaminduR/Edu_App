@@ -49,6 +49,12 @@ class DBProvider {
     paper.id = (await dbClient.insert('Paper', paper.toJson())).toString();
   }
 
+  Future<void> addDownload(PaperShowcase paper) async {
+    var dbClient = await db;
+    paper.id =
+        (await dbClient.insert('downloadedPaper', paper.toJson())).toString();
+  }
+
   Future<PaperShowcase> getPaperbyId(int id) async {
     var dbClient = await db;
     var result =
@@ -59,6 +65,25 @@ class DBProvider {
   Future<List<PaperShowcase>> getPapers() async {
     var dbClient = await db;
     List<Map> maps = await dbClient.query('Paper', columns: [
+      'id',
+      'url',
+      'name',
+      'number',
+      'hTime',
+      'mTime',
+    ]);
+    List<PaperShowcase> papers = [];
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        papers.add(PaperShowcase.fromJson(maps[i]));
+      }
+    }
+    return papers;
+  }
+
+  Future<List<PaperShowcase>> getdownPapers() async {
+    var dbClient = await db;
+    List<Map> maps = await dbClient.query('downloadedPaper', columns: [
       'id',
       'url',
       'name',

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:edu_app/Datalayer/LocalDB.dart';
 import 'package:edu_app/Datalayer/paper.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
@@ -10,6 +11,7 @@ PaperShowcase paperFromJson(String str) =>
 String paperToJson(PaperShowcase data) => json.encode(data.toJson());
 
 class PaperShowcase {
+  DBProvider dbProvider = new DBProvider();
   String id;
   String url;
   String name;
@@ -43,6 +45,7 @@ class PaperShowcase {
         "hTime": hTime,
         "mTime": mTime,
       };
+
   // Future<void> downloadFile(String url, String filename) async {
   //   HttpClient httpClient = new HttpClient();
   //   var request = await httpClient.getUrl(Uri.parse(url));
@@ -54,8 +57,17 @@ class PaperShowcase {
   //   file.writeAsBytesSync(bytes, flush: true);
   // }
 
-  Future<void> downloadFile(String url, String filename) async {
-    
+  Future<void> downloadFile() async {
+    String url = this.url;
+    String filename = this.name;
+    Dio dio = new Dio();
+    try {
+      Directory dir = await getApplicationDocumentsDirectory();
+      await dio.download(url, "${dir.path}/$filename");
+      dbProvider.addDownload(this);
+    } catch (e) {
+      print(e);
+    }
   }
 
   Future<String> get _localPath async {
