@@ -1,3 +1,4 @@
+import 'package:edu_app/UI/Onboarding/login.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -60,7 +61,8 @@ class OnBoardingPageState extends State<OnBoardingPage> {
                 padding: EdgeInsets.fromLTRB(0.0, 0.0, 30.0, 30.0),
                 child: FloatingActionButton.extended(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                        builder: (context) => new LoginPage()));
                   },
                   backgroundColor: AppColor.colors[1].color,
                   label: Icon(Icons.arrow_forward),

@@ -1,8 +1,8 @@
-import 'package:edu_app/Datalayer/classes/paper.dart';
+import 'package:edu_app/Datalayer/paper.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/Paper UI/reviewanswers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+
 
 class QuizFinishedPage extends StatelessWidget {
   final List<Question> questions;

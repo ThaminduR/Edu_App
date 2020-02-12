@@ -1,4 +1,4 @@
-import 'package:edu_app/Datalayer/classes/Database.dart';
+import 'package:edu_app/Datalayer/Database.dart';
 
 class Paper {
   String id;
@@ -29,17 +29,17 @@ class Paper {
   }
 
   void saveAnswers(answers, correct) {
-    Database db = Database.getdb();
+    Firebase db = Firebase.getdb();
     db.uploadAnswers(this, answers, correct);
   }
 
   void updateScore(user, correct) {
-    Database db = Database.getdb();
+    Firebase db = Firebase.getdb();
     db.updateLeaderboard(user, correct);
   }
 
   Future<bool> checkFirstTime(user) async {
-    Database db = Database.getdb();
+    Firebase db = Firebase.getdb();
     return await db.firstTime(user, this.id);
   }
 

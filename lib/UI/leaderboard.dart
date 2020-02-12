@@ -1,4 +1,4 @@
-import 'package:edu_app/Datalayer/classes/Database.dart';
+import 'package:edu_app/Datalayer/Database.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,9 +33,10 @@ class LeaderboardPage extends StatelessWidget {
   }
 
   Widget buildScreen(context) {
-    Database db = Database.getdb();
+    Firebase db = Firebase.getdb();
     var size = MediaQuery.of(context).size;
-    List list = db.getUsers();
+    List list = [];
+    //db.getUsers();
     return Container(
       child: Stack(
         children: [

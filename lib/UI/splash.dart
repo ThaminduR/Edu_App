@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/UI/Onboarding/onboarding.dart';
 import 'package:edu_app/UI/Onboarding/login.dart';
+import 'package:edu_app/Controllers/paperController.dart';
 
 class Splash extends StatefulWidget {
   @override
@@ -14,9 +15,16 @@ class SplashState extends State<Splash> {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     bool _seen = (prefs.getBool('seen') ?? false);
+    var name = (prefs.getString('name') ?? '');
+    var number = (prefs.getString('number') ?? '');
     if (_seen) {
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => new LoginPage()));
+      if (name == '' && number == '') {
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(builder: (context) => new LoginPage()));
+      } else {
+        Navigator.of(context).pushReplacement(
+            new MaterialPageRoute(builder: (context) => new HomePage()));
+      }
     } else {
       prefs.setBool('seen', true);
       Navigator.of(context).pushReplacement(
@@ -27,7 +35,9 @@ class SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-
+    PaperController paperController = new PaperController();
+    paperController.savetoDB();
+    paperController.testPrintLocalPapers();
     new Timer(new Duration(milliseconds: 1000), () {
       checkFirstSeen();
     });

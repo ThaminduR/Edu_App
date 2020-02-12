@@ -1,33 +1,34 @@
-import 'package:edu_app/Datalayer/classes/paperShowcase.dart';
+import 'package:edu_app/Datalayer/paperShowcase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:edu_app/Datalayer/classes/user.dart';
+import 'package:edu_app/Datalayer/user.dart';
 
-class Database {
+class Firebase {
   // Access a Cloud Firestore instance from your Activity
-  final databaseReference = Firestore.instance;
-  static Database database;
+  final firebaseReference = Firestore.instance;
+  static Firebase firebase;
 
-static Database getdb(){
-  if (database ==null){
-    database = Database();
+  static Firebase getdb() {
+    if (firebase == null) {
+      firebase = Firebase();
+    }
+    return firebase;
   }
-  return database;
-}
 
-//fetch currently posted papers from database
+//fetch currently posted papers from Firebase
   Future<List> getPapers() async {
     List list = new List<PaperShowcase>();
-    await databaseReference
+    await firebaseReference
         .collection("papers")
         .getDocuments()
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
         PaperShowcase paper = new PaperShowcase(
-          f.data['url'],
-          f.data['name'],
-          f.data['number'],
-          f.data['hTime'],
-          f.data['mTime'],
+          id: f.data['id'],
+          url: f.data['url'],
+          name: f.data['name'],
+          number: f.data['number'],
+          hTime: f.data['hTime'],
+          mTime: f.data['mTime'],
         );
         list.add(paper);
       });
@@ -35,28 +36,33 @@ static Database getdb(){
     return list;
   }
 
-  List<String> getUsers() {
-    List list = new List<String>();
-    int counter = 15;
-    int count = counter;
-    do {
-      int user = (count + 1) - counter;
-      list.add('User $user ');
-      counter--;
-    } while (counter > 0);
-
+  Future<List> getUsers() async {
+    List list = new List<User>();
+    await firebaseReference
+        .collection('users')
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        User user = new User(
+          f.data['name'],
+          f.data['number'],
+        );
+        list.add(user);
+      });
+    });
     return list;
   }
 
 //to get user details
   Future<User> getUserDetails(currentUser) async {
-    var document = databaseReference.collection('users').document(currentUser);
+    var document = firebaseReference.collection('users').document(currentUser);
     await document.get().then((userSnapshot) {
       if (userSnapshot.exists) {
         User user = User(
           userSnapshot.data['name'],
-          userSnapshot.data['register_date'],
-          userSnapshot.data['total_score'],
+          userSnapshot.data['number'],
+          //userSnapshot.data['register_date'],
+          //userSnapshot.data['total_score'],
         );
         return user;
       } else {
@@ -66,11 +72,11 @@ static Database getdb(){
     return null;
   }
 
-//upload the answers and paper details to database
+//upload the answers and paper details to Firebase
   Future<void> uploadAnswers(paper, answers, correct) async {
     Map<dynamic, dynamic> data =
         answers.map((k, v) => MapEntry(k.toString(), v));
-    await databaseReference
+    await firebaseReference
         .collection("users")
         .document('0779195992')
         .collection("Papers")
@@ -85,13 +91,13 @@ static Database getdb(){
 
 //Update leaderboard with paper marks. This is used by a paper object fucntion
   void updateLeaderboard(user, correct) async {
-    var document = databaseReference.collection('leaderboard').document(user);
+    var document = firebaseReference.collection('leaderboard').document(user);
     await document.get().then(
       (userScore) async {
         if (userScore.exists) {
           int marks = userScore['score'];
           marks += correct;
-          await databaseReference
+          await firebaseReference
               .collection("leaderboard")
               .document(user)
               .updateData({'score': marks});
@@ -102,7 +108,7 @@ static Database getdb(){
 
 //check if the user is trying paper for the first time.
   Future<bool> firstTime(user, paperid) async {
-    var document = databaseReference
+    var document = firebaseReference
         .collection('leaderboard')
         .document(user)
         .collection("Papers")

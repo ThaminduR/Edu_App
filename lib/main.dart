@@ -5,6 +5,7 @@ import 'package:edu_app/UI/Paper UI/quizLoadScreen.dart';
 import 'package:edu_app/UI/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
 // import 'Datalayer/models/connectivity.dart';
 
 void main() {

@@ -1,6 +1,6 @@
 import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:edu_app/Controllers/LoginController.dart';
 
 import '../home.dart';
 
@@ -97,7 +97,7 @@ class LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         validator: (val) {
-                          if (val.length <3) {
+                          if (val.length < 3) {
                             return "Cannot be less than 4 !";
                           } else {
                             return null;
@@ -126,7 +126,7 @@ class LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         validator: (val) {
-                          if (val.length <9) {
+                          if (val.length < 9) {
                             return "Invalid length";
                           } else {
                             return null;
@@ -145,7 +145,10 @@ class LoginPageState extends State<LoginPage> {
               onPressed: () => {
                 if (_formKey.currentState.validate())
                   {
-                    savelogin(),
+                    LoginController.savelogin(
+                        nametextcontroller, numtextcontroller),
+                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
+                        builder: (context) => new HomePage()))
                   },
               },
               label: Text("Submit"),
@@ -154,16 +157,5 @@ class LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  Future<void> savelogin() async {
-    print(nametextcontroller.text);
-    if (nametextcontroller.text != "" && numtextcontroller.text != "") {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('name', nametextcontroller.text.toString());
-      prefs.setString('number', numtextcontroller.text.toString());
-      Navigator.of(context).pushReplacement(
-          new MaterialPageRoute(builder: (context) => new HomePage()));
-    }
   }
 }
