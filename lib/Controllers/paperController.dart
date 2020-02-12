@@ -6,10 +6,13 @@ class PaperController {
   Firebase _database = Firebase.getdb();
   DBProvider dbProvider = new DBProvider();
 
+  //get paper metadata from firebase
   Future<List> getPapers() async {
     return this._database.getPapers();
   }
 
+  //to compare the papers in local db and firebase
+  //papers which are not listed in local db is returned
   Future<List<PaperShowcase>> compareDB() async {
     List<PaperShowcase> firebasePapers = await getPapers();
     List<String> firebaseid = [];
@@ -38,6 +41,7 @@ class PaperController {
     return output;
   }
 
+  //papers which are not listed in local db is saved to local db
   void savetoDB() async {
     List<PaperShowcase> papers = await compareDB();
     papers.forEach((paper) {
@@ -45,6 +49,7 @@ class PaperController {
     });
   }
 
+  //for testing purposes
   void testPrintLocalPapers() async {
     List<PaperShowcase> papers = await dbProvider.getPapers();
     papers.forEach((paper) {
@@ -52,11 +57,13 @@ class PaperController {
     });
   }
 
+  //to get all the downloaded papers
   Future<List<PaperShowcase>> getLocalPapers() async {
     List<PaperShowcase> papers = await dbProvider.getdownPapers();
     return papers;
   }
 
+  //to get the list of paper which are not downloaded
   Future<List<PaperShowcase>> getNewPapers() async {
     List<PaperShowcase> papers = await dbProvider.getPapers();
     List<String> paperid = [];

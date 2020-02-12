@@ -45,18 +45,7 @@ class PaperShowcase {
         "hTime": hTime,
         "mTime": mTime,
       };
-
-  // Future<void> downloadFile(String url, String filename) async {
-  //   HttpClient httpClient = new HttpClient();
-  //   var request = await httpClient.getUrl(Uri.parse(url));
-  //   var response = await request.close();
-  //   var bytes = await consolidateHttpClientResponseBytes(response);
-  //   String dir = (await getApplicationDocumentsDirectory())
-  //       .path; //getApplicationDocumentsDirectory getExternalStorageDirectory for internal one. can't see from file manager
-  //   File file = new File('$dir/$filename');
-  //   file.writeAsBytesSync(bytes, flush: true);
-  // }
-
+      
   Future<void> downloadFile() async {
     String url = this.url;
     String filename = this.name;

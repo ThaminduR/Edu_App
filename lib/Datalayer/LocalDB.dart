@@ -5,10 +5,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:edu_app/Datalayer/paperShowcase.dart';
 
+//Db helper class which access sqlite db
 class DBProvider {
-  // DBProvider._();
-  // static final DBProvider db = DBProvider._();
-
   static Database _database;
 
   Future<Database> get db async {
@@ -19,6 +17,7 @@ class DBProvider {
     return _database;
   }
 
+  //initializing of the db. Add more tables if needed
   initDB() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "Grade5.db");
@@ -44,17 +43,20 @@ class DBProvider {
     });
   }
 
+  //to add paper metadata to local db
   Future<void> add(PaperShowcase paper) async {
     var dbClient = await db;
     paper.id = (await dbClient.insert('Paper', paper.toJson())).toString();
   }
 
+  //to add metadata of downloaded papers to local db
   Future<void> addDownload(PaperShowcase paper) async {
     var dbClient = await db;
     paper.id =
         (await dbClient.insert('downloadedPaper', paper.toJson())).toString();
   }
 
+  //to get a paper by its id from local db
   Future<PaperShowcase> getPaperbyId(int id) async {
     var dbClient = await db;
     var result =
@@ -62,6 +64,9 @@ class DBProvider {
     return result.isNotEmpty ? PaperShowcase.fromJson(result.first) : Null;
   }
 
+  //to get all the papers currently available in the firebase.
+  //This infact return all the paper metadata in local db
+  //Local db is updated every time the app is opened.
   Future<List<PaperShowcase>> getPapers() async {
     var dbClient = await db;
     List<Map> maps = await dbClient.query('Paper', columns: [
@@ -81,6 +86,7 @@ class DBProvider {
     return papers;
   }
 
+  //to get a list of downloaded paper metadata.
   Future<List<PaperShowcase>> getdownPapers() async {
     var dbClient = await db;
     List<Map> maps = await dbClient.query('downloadedPaper', columns: [
