@@ -131,7 +131,7 @@ Widget buildPapers(context, size, paper) {
           ),
           Padding(
             padding: EdgeInsets.fromLTRB(
-                0.0, size.height * 0.02, 0.0, size.height * 0.08),
+                0.0, size.height * 0.02, 0.0, size.height * 0.02),
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(

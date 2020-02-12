@@ -2,6 +2,7 @@ import 'package:edu_app/Datalayer/Database.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LeaderboardPageRoute extends CupertinoPageRoute {
   LeaderboardPageRoute()
@@ -15,6 +16,7 @@ class LeaderboardPageRoute extends CupertinoPageRoute {
 }
 
 class LeaderboardPage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -105,6 +107,12 @@ class LeaderboardPage extends StatelessWidget {
     );
   }
 
+  Future<String> getname() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    String name = pref.getString('name');
+    return name;
+  }
+
   Widget buildMe(size) {
     return Container(
       decoration: BoxDecoration(
@@ -131,14 +139,20 @@ class LeaderboardPage extends StatelessWidget {
                 color: Colors.green[900],
               ),
             ),
-            trailing: Stack(children: [
-              Icon(Icons.grade, color: AppColor.colors[3].color, size: 24.0),
-              Text("      179",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: AppColor.colors[1].color,
-                  )),
-            ]),
+            trailing: Container(
+              width: size.width * 0.2,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.grade,
+                        color: AppColor.colors[3].color, size: 24.0),
+                    Text("179",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: AppColor.colors[1].color,
+                        )),
+                  ]),
+            ),
             title: Text(
               'Username',
               style: TextStyle(

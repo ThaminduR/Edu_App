@@ -4,9 +4,9 @@ import 'package:edu_app/Datalayer/Database.dart';
 class LoginController {
   static Future<void> savelogin(nametextcontroller, numtextcontroller) async {
     if (nametextcontroller.text != "" && numtextcontroller.text != "") {
-      var name = nametextcontroller.text;
-      var num_ = numtextcontroller.text;
-      var number = num_.trim();
+      //var name = nametextcontroller.text;
+      var _num = numtextcontroller.text;
+      var number = _num.trim();
       if (number.length == 10) {
         number = number.substring(1);
       }
@@ -20,6 +20,7 @@ class LoginController {
       });
       if (unique) {
         //send requrest to ideamart
+        //TODO: save to firebase
       }
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('name', nametextcontroller.text.toString());
