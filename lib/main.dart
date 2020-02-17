@@ -14,7 +14,7 @@ void main() {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  // ConnectionStatusSingleton connectionStatus =
+  // ConnectionStatusSingleton connectionStatus = 
   //     ConnectionStatusSingleton.getInstance();
   // connectionStatus.initialize();
   runApp(
@@ -23,7 +23,8 @@ void main() {
       theme: ThemeData(
           //Colors are defined in AppColor class
           primaryColor: AppColor.colors[0].color,
-          primaryColorDark: AppColor.colors[0].color),
+          primaryColorDark: AppColor.colors[0].color,
+          fontFamily: 'Ubuntu'),
       initialRoute: '/',
       routes: {
         '/': (context) =>

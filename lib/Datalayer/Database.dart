@@ -72,6 +72,16 @@ class Firebase {
     return null;
   }
 
+//add new users to firebase
+  Future<void> addUser(name, number) async {
+    await firebaseReference.collection("users").document(number).setData(
+      {
+        "name": '$name',
+        "number": number,
+      },
+    );
+  }
+
 //upload the answers and paper details to Firebase
   Future<void> uploadAnswers(paper, answers, correct) async {
     Map<dynamic, dynamic> data =

@@ -2,9 +2,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:edu_app/Datalayer/Database.dart';
 
 class LoginController {
-  static Future<void> savelogin(nametextcontroller, numtextcontroller) async {
+
+  Firebase _database = Firebase.getdb();
+
+  Future<void> savelogin(nametextcontroller, numtextcontroller) async {
     if (nametextcontroller.text != "" && numtextcontroller.text != "") {
-      //var name = nametextcontroller.text;
+      var name = nametextcontroller.text;
       var _num = numtextcontroller.text;
       var number = _num.trim();
       if (number.length == 10) {
@@ -12,15 +15,15 @@ class LoginController {
       }
       Firebase db = Firebase.getdb();
       List users = await db.getUsers();
-      bool unique = true;
+      bool _new = true;
       users.forEach((user) {
         if (user.number == number) {
-          unique = false;
+          _new = false;
         }
       });
-      if (unique) {
+      if (_new) {
         //send requrest to ideamart
-        //TODO: save to firebase
+        _database.addUser(name, number);
       }
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('name', nametextcontroller.text.toString());

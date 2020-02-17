@@ -12,7 +12,7 @@ class LoginPageState extends State<LoginPage> {
   final _formKey = new GlobalKey<FormState>();
   final nametextcontroller = TextEditingController();
   final numtextcontroller = TextEditingController();
-
+  final loginController = LoginController();
   void dispose() {
     nametextcontroller.dispose();
     numtextcontroller.dispose();
@@ -145,7 +145,7 @@ class LoginPageState extends State<LoginPage> {
               onPressed: () => {
                 if (_formKey.currentState.validate())
                   {
-                    LoginController.savelogin(
+                    loginController.savelogin(
                         nametextcontroller, numtextcontroller),
                     Navigator.of(context).pushReplacement(new MaterialPageRoute(
                         builder: (context) => new HomePage()))
