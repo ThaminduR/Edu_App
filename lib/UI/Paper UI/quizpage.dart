@@ -5,13 +5,6 @@ import 'package:edu_app/Datalayer/paper.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/Paper UI/quizfinish.dart';
 import 'package:flutter/material.dart';
-//TODO: FIXME
-//A bug occured during test run.
-//Timer was set to 90 minutes and after about 10-15 minutes execption occured.
-//It had something to do with tickerproviderstatemixin
-//Application didn't respond.
-
-//Another bug on timer submit throws an exception.
 
 class QuizPage extends StatefulWidget {
   final Paper paper;
@@ -37,7 +30,7 @@ class _QuizPageState extends State<QuizPage>
     controller = AnimationController(
       vsync: this,
       duration:
-          // Duration(hours: widget.paper.htime, minutes: widget.paper.mtime),
+          //Duration(hours: widget.paper.htime, minutes: widget.paper.mtime),
           Duration(seconds: 10),
     );
     starttimer();
@@ -56,10 +49,11 @@ class _QuizPageState extends State<QuizPage>
     Size size = MediaQuery.of(context).size;
     Question question = widget.paper.qs[_currentIndex];
     final List<Answer> options = question.as;
-    Uint8List bytes;
-    if (question.q.i != "") {
-      bytes = base64.decode(question.q.i);
-    }
+    // Uint8List bytes;
+    // Uint8List qbytes;
+    // if (question.q.i != "") {
+    //   qbytes = base64.decode(question.q.i);
+    // }
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -178,6 +172,66 @@ class _QuizPageState extends State<QuizPage>
                         ],
                       ),
                     ),
+
+                    SizedBox(
+                      height: size.height * 0.025,
+                    ),
+                    SizedBox(width: size.width * 0.05),
+                    // Expanded(
+                    //   child: Container(
+                    //     color: Colors.white,
+                    //     child:
+                    ListView(
+                      shrinkWrap: true,
+                      children: <Widget>[
+                        Text(
+                          "Q" +
+                              (_currentIndex + 1).toString() +
+                              " : " +
+                              widget.paper.qs[_currentIndex].q.t,
+                          style: TextStyle(
+                              fontSize: size.height * 0.025,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.white),
+                        ),
+                        ...options.map(
+                          (option) => Column(
+                            children: [
+                              RadioListTile(
+                                title: Text(
+                                  "${option.t}",
+                                  style: TextStyle(
+                                      fontSize: size.height * 0.02,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.white),
+                                ),
+                                groupValue: _answers[_currentIndex],
+                                value: option.t,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _answers[_currentIndex] = option.t;
+                                  });
+                                },
+                              ),
+                              // Container(
+                              //   child: (bytes != null)
+                              //       ? Image.memory(
+                              //           bytes,
+                              //           height: size.height * 0.15,
+                              //           width: size.width * 0.15,
+                              //         )
+                              //       : Container(),
+                              // ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    //   ),
+                    // ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
                     Container(
                       child: _currentIndex == (widget.paper.qs.length - 1)
                           ? RaisedButton(
@@ -191,55 +245,6 @@ class _QuizPageState extends State<QuizPage>
                               onPressed: _submit,
                             )
                           : null,
-                    ),
-                    SizedBox(
-                      height: size.height * 0.025,
-                    ),
-                    SizedBox(width: size.width * 0.05),
-                    Expanded(
-                      child: Container(
-                        color: Colors.white,
-                        child: ListView(
-                          shrinkWrap: true,
-                          children: <Widget>[
-                            Text(
-                              widget.paper.qs[_currentIndex].q.t,
-                              style: TextStyle(
-                                  fontSize: size.height * 0.02,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black),
-                            ),
-                            ...options.map(
-                              (option) => Column(
-                                children: [
-                                  RadioListTile(
-                                    title: Text("${option.t}"),
-                                    groupValue: _answers[_currentIndex],
-                                    value: option.t,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _answers[_currentIndex] = option.t;
-                                      });
-                                    },
-                                  ),
-                                  Container(
-                                    child: (bytes != null)
-                                        ? Image.memory(
-                                            bytes,
-                                            height: size.height * 0.15,
-                                            width: size.width * 0.15,
-                                          )
-                                        : Container(),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: size.height * 0.03,
                     ),
                   ],
                 ),

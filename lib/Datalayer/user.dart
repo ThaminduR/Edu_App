@@ -2,7 +2,7 @@ import 'package:edu_app/Datalayer/Database.dart';
 
 class User {
   String name;
-  int number;
+  String number;
   int totalScore;
   DateTime registerDate;
 

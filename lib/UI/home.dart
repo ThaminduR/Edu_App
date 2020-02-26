@@ -255,7 +255,7 @@ class HomePageState extends State<HomePage> {
                                 height: size.height * 0.05,
                               ),
                               Icon(
-                                Icons.settings,
+                                Icons.collections_bookmark,
                                 size: 30,
                                 color: Colors.white,
                               ),
@@ -272,7 +272,7 @@ class HomePageState extends State<HomePage> {
                               //   ),
                               // ),
                               Text(
-                                'Settings',
+                                'Lessons',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: size.height * 0.018,

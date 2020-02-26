@@ -54,8 +54,4 @@ class AboutUsPage extends StatelessWidget {
       ),
     );
   }
-
-  Widget buildScreen() {
-    return Text('Hello World. This page is about us');
-  }
 }

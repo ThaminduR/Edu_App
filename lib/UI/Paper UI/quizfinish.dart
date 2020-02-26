@@ -3,14 +3,11 @@ import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/Paper UI/reviewanswers.dart';
 import 'package:flutter/material.dart';
 
-
 class QuizFinishedPage extends StatelessWidget {
   final List<Question> questions;
   final Map<int, dynamic> answers;
   final Paper paper;
-  bool firsttime = false;
-
-  int correctAnswers;
+  
   QuizFinishedPage({
     Key key,
     @required this.questions,
@@ -20,15 +17,15 @@ class QuizFinishedPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int correct = 0;
     Size size = MediaQuery.of(context).size;
-    this.answers.forEach((index, value) {
-      if (this.questions[index].as[questions[index].a - 1].t == value)
-        correct++;
-    });
-    String user = '0779195992';
+    // int correct = 0;
+    // this.answers.forEach((index, value) {
+    //   if (this.questions[index].as[questions[index].a - 1].t == value)
+    //     correct++;
+    // });
+    int correct = paper.countAnswers(this.answers);
     this.paper.saveAnswers(this.answers, correct);
-    this.paper.updateScore(user, correct);
+    this.paper.updateScore(correct);
     final TextStyle titleStyle = TextStyle(
         color: Colors.black87, fontSize: 22.0, fontWeight: FontWeight.w500);
     final TextStyle trailingStyle = TextStyle(
@@ -142,8 +139,8 @@ class QuizFinishedPage extends StatelessWidget {
     );
   }
 
-  void firstTimeInit(user) async {
-    bool b = await paper.checkFirstTime(user);
-    this.firsttime = b;
-  }
+  // void firstTimeInit(user) async {
+  //   bool b = await paper.checkFirstTime(user);
+  //   this.firsttime = b;
+  // }
 }

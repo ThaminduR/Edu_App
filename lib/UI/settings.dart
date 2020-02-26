@@ -19,85 +19,36 @@ class SettingsPage extends StatelessWidget {
     var size = MediaQuery.of(context).size;
     return Scaffold(
         appBar: AppBar(
-          title: Text('සැකසුම් | Settings'),
+          title: Text('Lessons'),
         ),
-        body: Container(child: buildScreen(context)));
-  }
-
-  Widget buildScreen(context) {
-    var size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: Theme(
-        data: ThemeData(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Card(
-              color: Colors.white,
-              elevation: 2.0,
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(
-                      Icons.person,
-                      color: AppColor.colors[1].color,
-                    ),
-                    title: Text(
-                      "Account",
-                      style: TextStyle(
-                        color: AppColor.colors[1].color,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_right,
-                      color: AppColor.colors[1].color,
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.05,
-                  ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.android,
-                      color: AppColor.colors[1].color,
-                    ),
-                    title: Text(
-                      "Color",
-                      style: TextStyle(
-                        color: AppColor.colors[1].color,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_right,
-                      color: AppColor.colors[1].color,
-                    ),
-                  ),
-                  SizedBox(
-                    height: size.height * 0.05,
-                  ),
-                  ListTile(
-                      leading: Icon(
-                        Icons.notifications,
-                        color: AppColor.colors[1].color,
-                      ),
-                      title: Text(
-                        "Notifications",
-                        style: TextStyle(
-                          color: AppColor.colors[1].color,
-                        ),
-                      ),
-                      trailing: Switch(
-                        activeColor: AppColor.colors[1].color,
-                        onChanged: (value) {},
-                        value: true,
-                      )),
-                ],
-              ),
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              stops: [0.1, 0.5, 0.7, 0.9],
+              colors: [
+                AppColor.colors[1].color,
+                AppColor.colors[3].color,
+                AppColor.colors[3].color,
+                AppColor.colors[3].color,
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+          child: Column(
+            children: [
+              SizedBox(height: size.height * 0.1),
+              Center(
+                child: Text(
+                  "Coming Soon !",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: size.height * 0.03,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ));
   }
 }

@@ -1,6 +1,10 @@
 import 'package:edu_app/Datalayer/Database.dart';
+import 'package:edu_app/Datalayer/LocalDB.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Paper {
+  DBProvider dbProvider = new DBProvider();
+
   String id;
   List<Question> qs;
   int htime;
@@ -28,19 +32,36 @@ class Paper {
     this.url = url;
   }
 
-  void saveAnswers(answers, correct) {
+  void saveAnswers(answers, correct) async {
     Firebase db = Firebase.getdb();
-    db.uploadAnswers(this, answers, correct);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var user = prefs.getString('number');
+    print(user);
+    if (await db.firstTime(user, this.id)) {
+      db.uploadAnswers(this, answers, correct);
+    }
   }
 
-  void updateScore(user, correct) {
+  void updateScore(correct) async {
     Firebase db = Firebase.getdb();
-    db.updateLeaderboard(user, correct);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var user = prefs.getString('number');
+    if (await db.firstTime(user, this.id)) {
+      db.updateLeaderboard(user, correct);
+    }
   }
 
   Future<bool> checkFirstTime(user) async {
     Firebase db = Firebase.getdb();
     return await db.firstTime(user, this.id);
+  }
+
+  int countAnswers(answers) {
+    int correct = 0;
+    answers.forEach((index, value) {
+      if (this.qs[index].as[qs[index].a - 1].t == value) correct++;
+    });
+    return correct;
   }
 
   void setId(String id) {

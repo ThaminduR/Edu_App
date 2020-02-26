@@ -27,7 +27,7 @@ class LoginController {
       }
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('name', nametextcontroller.text.toString());
-      prefs.setString('number', numtextcontroller.text.toString());
+      prefs.setString('number', number);
     }
   }
 }
