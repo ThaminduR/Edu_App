@@ -83,12 +83,12 @@ class Firebase {
   }
 
 //upload the answers and paper details to Firebase
-  Future<void> uploadAnswers(paper, answers, correct) async {
+  Future<void> uploadAnswers(user, paper, answers, correct) async {
     Map<dynamic, dynamic> data =
         answers.map((k, v) => MapEntry(k.toString(), v));
     await firebaseReference
         .collection("users")
-        .document('0779195992')
+        .document(user)
         .collection("Papers")
         .document(paper.id)
         .setData({
@@ -107,10 +107,19 @@ class Firebase {
         if (userScore.exists) {
           int marks = userScore['score'];
           marks += correct;
+          print(userScore);
+          print(marks);
           await firebaseReference
               .collection("leaderboard")
               .document(user)
               .updateData({'score': marks});
+        } else {
+          int marks = correct;
+          print(marks);
+          await firebaseReference
+              .collection("leaderboard")
+              .document(user)
+              .setData({'score': marks});
         }
       },
     );
@@ -118,18 +127,19 @@ class Firebase {
 
 //check if the user is trying paper for the first time.
   Future<bool> firstTime(user, paperid) async {
+    bool _bool = false;
     var document = firebaseReference
-        .collection('leaderboard')
+        .collection('users')
         .document(user)
         .collection("Papers")
         .document(paperid);
     await document.get().then((paper) {
       if (paper.exists) {
-        return false;
+        _bool = false;
       } else {
-        return true;
+        _bool = true;
       }
     });
-    return null; //unreachable
+    return _bool; //unreachable
   }
 }

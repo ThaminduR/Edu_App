@@ -36,9 +36,8 @@ class Paper {
     Firebase db = Firebase.getdb();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var user = prefs.getString('number');
-    print(user);
     if (await db.firstTime(user, this.id)) {
-      db.uploadAnswers(this, answers, correct);
+      db.uploadAnswers(user,this, answers, correct);
     }
   }
 
