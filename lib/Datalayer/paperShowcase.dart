@@ -45,7 +45,7 @@ class PaperShowcase {
         "hTime": hTime,
         "mTime": mTime,
       };
-      
+
   Future<void> downloadFile() async {
     String url = this.url;
     String filename = this.name;

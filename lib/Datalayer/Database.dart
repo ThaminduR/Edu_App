@@ -1,3 +1,4 @@
+import 'package:edu_app/Datalayer/paperMarks.dart';
 import 'package:edu_app/Datalayer/paperShowcase.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:edu_app/Datalayer/user.dart';
@@ -196,5 +197,24 @@ class Firebase {
       }
     });
     return _bool;
+  }
+
+  Future<List<PaperMarks>> getPaperMarks(user) async {
+    List list = new List<PaperMarks>();
+    await firebaseReference
+        .collection('users')
+        .document(user)
+        .collection('Papers')
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        PaperMarks paper = PaperMarks(
+          f.data['correct_answers'],
+          f.documentID,
+        );
+        list.add(paper);
+      });
+    });
+    return list;
   }
 }
