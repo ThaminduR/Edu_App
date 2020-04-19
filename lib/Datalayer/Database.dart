@@ -16,14 +16,15 @@ class Firebase {
 
   Future<bool> checknewUser(uid) async {
     var document = firebaseReference.collection('users').document(uid);
+    bool isnew;
     await document.get().then((userSnapshot) {
       if (userSnapshot.exists) {
-        return false;
+        isnew = false;
       } else {
-        return true;
+        isnew = true;
       }
     });
-    return true;
+    return isnew;
   }
 
 //fetch currently posted papers from Firebase
@@ -58,11 +59,47 @@ class Firebase {
         User user = new User(
           f.data['name'],
           f.data['number'],
+          f.data['registerDate'],
         );
         list.add(user);
       });
     });
     return list;
+  }
+
+  Future<List> getLBUsers() async {
+    List list = new List<LBUser>();
+    await firebaseReference
+        .collection('leaderboard')
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        LBUser lbuser = new LBUser(
+          f.data['name'],
+          f.documentID,
+          f.data['score'],
+        );
+        list.add(lbuser);
+      });
+    });
+    return list;
+  }
+
+  Future<LBUser> getmyScore(number) async {
+    var doc = firebaseReference.collection('leaderboard').document(number);
+    LBUser user;
+    await doc.get().then((userSnapshot) {
+      if (userSnapshot.exists) {
+        user = LBUser(
+          userSnapshot.data['name'],
+          userSnapshot.documentID,
+          userSnapshot.data['score'],
+        );
+      } else {
+        user = null;
+      }
+    });
+    return user;
   }
 
 //to get user details
@@ -73,8 +110,7 @@ class Firebase {
         User user = User(
           userSnapshot.data['name'],
           userSnapshot.data['number'],
-          //userSnapshot.data['register_date'],
-          //userSnapshot.data['total_score'],
+          userSnapshot.data['registerDate'],
         );
         return user;
       } else {
@@ -86,10 +122,18 @@ class Firebase {
 
 //add new users to firebase
   Future<void> addUser(uid, name, number) async {
+    var now = new DateTime.now();
     await firebaseReference.collection("users").document(uid).setData(
       {
         "name": '$name',
         "number": number,
+        "registerDate": now,
+      },
+    );
+    await firebaseReference.collection("leaderboard").document(number).setData(
+      {
+        "name": '$name',
+        "score": 0,
       },
     );
   }
@@ -119,8 +163,6 @@ class Firebase {
         if (userScore.exists) {
           int marks = userScore['score'];
           marks += correct;
-          print(userScore);
-          print(marks);
           await firebaseReference
               .collection("leaderboard")
               .document(user)
@@ -139,12 +181,13 @@ class Firebase {
 
 //check if the user is trying paper for the first time.
   Future<bool> firstTime(user, paperid) async {
-    bool _bool = false;
+    bool _bool;
     var document = firebaseReference
         .collection('users')
         .document(user)
         .collection("Papers")
         .document(paperid);
+
     await document.get().then((paper) {
       if (paper.exists) {
         _bool = false;
@@ -152,6 +195,6 @@ class Firebase {
         _bool = true;
       }
     });
-    return _bool; //unreachable
+    return _bool;
   }
 }

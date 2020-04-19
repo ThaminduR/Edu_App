@@ -1,10 +1,10 @@
 import 'package:edu_app/UI/Paper%20UI/newPaperView.dart';
-import 'package:edu_app/UI/aboutus.dart';
+import 'package:edu_app/UI/settings.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/leaderboard.dart';
 import 'package:edu_app/UI/Paper UI/paperListView.dart';
 import 'package:edu_app/UI/progress.dart';
-import 'package:edu_app/UI/settings.dart';
+import 'package:edu_app/UI/lessons.dart';
 import 'package:flutter/material.dart';
 
 //Uncomment text fields to display Sinhala text
@@ -52,8 +52,8 @@ class HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      height: size.width * 0.4,
-                      width: size.width * 0.4,
+                      height: size.width * 0.35,
+                      width: size.width * 0.35,
                       child: Card(
                         color: tileColor,
                         child: FlatButton(
@@ -99,8 +99,8 @@ class HomePageState extends State<HomePage> {
                       width: colSpace,
                     ),
                     Container(
-                      height: size.width * 0.4,
-                      width: size.width * 0.4,
+                      height: size.width * 0.35,
+                      width: size.width * 0.35,
                       child: Card(
                         color: tileColor,
                         child: FlatButton(
@@ -142,8 +142,8 @@ class HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      height: size.width * 0.4,
-                      width: size.width * 0.4,
+                      height: size.width * 0.35,
+                      width: size.width * 0.35,
                       child: Card(
                         color: tileColor,
                         child: FlatButton(
@@ -189,8 +189,8 @@ class HomePageState extends State<HomePage> {
                       width: colSpace,
                     ),
                     Container(
-                      height: size.width * 0.4,
-                      width: size.width * 0.4,
+                      height: size.width * 0.35,
+                      width: size.width * 0.35,
                       child: Card(
                         color: tileColor,
                         child: FlatButton(
@@ -241,13 +241,13 @@ class HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      height: size.width * 0.4,
-                      width: size.width * 0.4,
+                      height: size.width * 0.35,
+                      width: size.width * 0.35,
                       child: Card(
                         color: tileColor,
                         child: FlatButton(
                           onPressed: () {
-                            Navigator.of(context).push(SettingsPageRoute());
+                            Navigator.of(context).push(LessonsPageRoute());
                           },
                           child: Column(
                             children: <Widget>[
@@ -288,13 +288,13 @@ class HomePageState extends State<HomePage> {
                       width: colSpace,
                     ),
                     Container(
-                      height: size.width * 0.4,
-                      width: size.width * 0.4,
+                      height: size.width * 0.35,
+                      width: size.width * 0.35,
                       child: Card(
                         color: tileColor,
                         child: FlatButton(
                           onPressed: () {
-                            Navigator.of(context).push(AboutUsPageRoute());
+                            Navigator.of(context).push(SettingsPageRoute());
                           },
                           child: Column(
                             children: <Widget>[
@@ -319,7 +319,7 @@ class HomePageState extends State<HomePage> {
                               //   ),
                               // ),
                               Text(
-                                'About Us',
+                                'Settings',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: size.height * 0.018,
