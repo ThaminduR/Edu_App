@@ -14,6 +14,18 @@ class Firebase {
     return firebase;
   }
 
+  Future<bool> checknewUser(uid) async {
+    var document = firebaseReference.collection('users').document(uid);
+    await document.get().then((userSnapshot) {
+      if (userSnapshot.exists) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    return true;
+  }
+
 //fetch currently posted papers from Firebase
   Future<List> getPapers() async {
     List list = new List<PaperShowcase>();
@@ -73,8 +85,8 @@ class Firebase {
   }
 
 //add new users to firebase
-  Future<void> addUser(name, number) async {
-    await firebaseReference.collection("users").document(number).setData(
+  Future<void> addUser(uid, name, number) async {
+    await firebaseReference.collection("users").document(uid).setData(
       {
         "name": '$name',
         "number": number,

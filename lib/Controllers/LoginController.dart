@@ -1,33 +1,43 @@
+import 'package:edu_app/UI/Onboarding/nameUI.dart';
+import 'package:edu_app/UI/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:edu_app/Datalayer/Database.dart';
 
 class LoginController {
-
   Firebase _database = Firebase.getdb();
 
-  Future<void> savelogin(nametextcontroller, numtextcontroller) async {
-    if (nametextcontroller.text != "" && numtextcontroller.text != "") {
-      var name = nametextcontroller.text;
-      var _num = numtextcontroller.text;
-      var number = _num.trim();
-      if (number.length == 10) {
-        number = number.substring(1);
-      }
-      Firebase db = Firebase.getdb();
-      List users = await db.getUsers();
-      bool _new = true;
-      users.forEach((user) {
-        if (user.number == number) {
-          _new = false;
-        }
-      });
-      if (_new) {
-        //send requrest to ideamart
-        _database.addUser(name, number);
-      }
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('name', nametextcontroller.text.toString());
-      prefs.setString('number', number);
+  Future<void> savelogin(name) async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser user = await firebaseAuth.currentUser();
+    String uid = user.uid;
+    String number = user.phoneNumber;
+
+    _database.addUser(uid, name, number);
+  }
+
+  Future<void> selectlogin(context) async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseuser = await firebaseAuth.currentUser();
+    String uid = firebaseuser.uid;
+    Firebase db = Firebase.getdb();
+    bool isnew = await db.checknewUser(uid);
+    if (isnew) {
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => new NamePage()));
+    } else {
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => new HomePage()));
     }
+  }
+
+  Future<bool> isLogged() async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseuser = await firebaseAuth.currentUser();
+    if (firebaseuser != null) {
+      return true;
+    }
+    return false;
   }
 }

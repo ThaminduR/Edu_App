@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'package:edu_app/Controllers/LoginController.dart';
 import 'package:edu_app/UI/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/UI/Onboarding/onboarding.dart';
-import 'package:edu_app/UI/Onboarding/login.dart';
+import 'package:edu_app/UI/Onboarding/numberUI.dart';
 import 'package:edu_app/Controllers/paperController.dart';
 
 class Splash extends StatefulWidget {
@@ -14,13 +15,15 @@ class Splash extends StatefulWidget {
 class SplashState extends State<Splash> {
   Future checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    LoginController loginController = LoginController();
     bool _seen = (prefs.getBool('seen') ?? false);
-    var name = (prefs.getString('name') ?? '');
-    var number = (prefs.getString('number') ?? '');
+    bool islogged = await loginController.isLogged();
+    // var name = (prefs.getString('name') ?? '');
+    // var number = (prefs.getString('number') ?? '');
     if (_seen) {
-      if (name == '' && number == '') {
+      if (!islogged) {
         Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(builder: (context) => new LoginPage()));
+            new MaterialPageRoute(builder: (context) => new NumberPage()));
       } else {
         Navigator.of(context).pushReplacement(
             new MaterialPageRoute(builder: (context) => new HomePage()));

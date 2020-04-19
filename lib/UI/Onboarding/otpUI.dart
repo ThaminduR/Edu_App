@@ -1,21 +1,28 @@
 import 'package:edu_app/UI/colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/Controllers/LoginController.dart';
 
 import '../home.dart';
 
-class LoginPage extends StatefulWidget {
-  LoginPageState createState() => LoginPageState();
+class OTPPage extends StatefulWidget {
+  String actualCode;
+  OTPPage({
+    Key key,
+    @required this.actualCode,
+  }) : super(key: key);
+  OTPPageState createState() => OTPPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class OTPPageState extends State<OTPPage> {
   final _formKey = new GlobalKey<FormState>();
-  final nametextcontroller = TextEditingController();
-  final numtextcontroller = TextEditingController();
+  final otptextcontroller = TextEditingController();
   final loginController = LoginController();
+
+  String status = '';
+
   void dispose() {
-    nametextcontroller.dispose();
-    numtextcontroller.dispose();
+    otptextcontroller.dispose();
     super.dispose();
   }
 
@@ -54,7 +61,7 @@ class LoginPageState extends State<LoginPage> {
                       padding: EdgeInsets.fromLTRB(
                           0.0, (size.height) * 0.05, 0.0, 0.0),
                       child: Text(
-                        'Insert your details',
+                        'Enter OTP',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white,
@@ -84,31 +91,18 @@ class LoginPageState extends State<LoginPage> {
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(25.0),
-                        color: Colors.white,
                       ),
-                      child: TextFormField(
-                        controller: nametextcontroller,
-                        decoration: new InputDecoration(
-                          labelText: "Name",
-                          fillColor: Colors.white,
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(),
-                          ),
+                      child: Text(
+                        "Auto retrieval failed. Enter the 6 digit OTP you received.",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: size.height * 0.02,
                         ),
-                        validator: (val) {
-                          if (val.length < 3) {
-                            return "Cannot be less than 4 !";
-                          } else {
-                            return null;
-                          }
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        style: new TextStyle(),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                     SizedBox(
-                      height: (size.height) * 0.05,
+                      height: (size.height) * 0.03,
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -116,9 +110,9 @@ class LoginPageState extends State<LoginPage> {
                         color: Colors.white,
                       ),
                       child: TextFormField(
-                        controller: numtextcontroller,
+                        controller: otptextcontroller,
                         decoration: new InputDecoration(
-                          labelText: "Telephone Number",
+                          labelText: "OTP",
                           //fillColor: Colors.white,
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
@@ -126,7 +120,7 @@ class LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         validator: (val) {
-                          if (val.length < 9) {
+                          if (val.length < 6) {
                             return "Invalid length";
                           } else {
                             return null;
@@ -144,12 +138,7 @@ class LoginPageState extends State<LoginPage> {
               backgroundColor: AppColor.colors[1].color,
               onPressed: () => {
                 if (_formKey.currentState.validate())
-                  {
-                    loginController.savelogin(
-                        nametextcontroller, numtextcontroller),
-                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                        builder: (context) => new HomePage()))
-                  },
+                  {signInWithPhoneNumber(otptextcontroller.text.toString())},
               },
               label: Text("Submit"),
             )
@@ -157,5 +146,35 @@ class LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void signInWithPhoneNumber(String smsCode) async {
+    print(smsCode);
+    print("verification id in otp page");
+    print(widget.actualCode);
+    AuthCredential phoneAuthCredential = await PhoneAuthProvider.getCredential(
+        verificationId: widget.actualCode, smsCode: smsCode);
+    FirebaseAuth.instance
+        .signInWithCredential(phoneAuthCredential)
+        .then((AuthResult value) {
+      if (value.user != null) {
+        print(value.user);
+        setState(() {
+          status = 'Authentication successful !';
+        });
+        print('Authentication successful');
+        loginController.selectlogin(context);
+      } else {
+        setState(() {
+          status = 'Invalid code/invalid authentication !';
+        });
+        print('Invalid code/invalid authentication');
+      }
+    }).catchError((error) {
+      setState(() {
+        status = 'Something has gone wrong, please try later !';
+      });
+      print('Something has gone wrong, please try later');
+    });
   }
 }
