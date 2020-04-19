@@ -49,81 +49,67 @@ class LeaderboardPage extends StatelessWidget {
     List list = [];
     //db.getUsers();
     return Container(
-      child: Stack(
-        children: [
-          FutureBuilder(
-            future: leaderboardController.getLBUserList(),
-            builder: (context, usersnap) {
-              switch (usersnap.connectionState) {
-                case ConnectionState.none: //if there's no papers in database
-                  return Text('No Users to show');
-                case ConnectionState.active:
-                case ConnectionState.waiting: //show while papers are loading
-                  return Padding(
-                    padding: EdgeInsets.fromLTRB(
-                      size.width * 0.35,
-                      size.height * 0.425,
-                      size.width * 0.35,
-                      size.height * 0.425,
+      child: FutureBuilder(
+        future: leaderboardController.getLBUserList(),
+        builder: (context, usersnap) {
+          switch (usersnap.connectionState) {
+            case ConnectionState.none: //if there's no papers in database
+              return Text('No Users to show');
+            case ConnectionState.active:
+            case ConnectionState.waiting: //show while papers are loading
+              return Padding(
+                padding: EdgeInsets.fromLTRB(
+                  size.width * 0.35,
+                  size.height * 0.425,
+                  size.width * 0.35,
+                  size.height * 0.425,
+                ),
+                child: Container(
+                  alignment: Alignment.center,
+                  height: size.height * 0.05,
+                  width: size.width * 0.3,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.white,
                     ),
-                    child: Container(
-                      alignment: Alignment.center,
-                      height: size.height * 0.05,
-                      width: size.width * 0.3,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Colors.white,
-                        ),
-                        color: Colors.white,
-                      ),
-                      child: Text('Loading Users'),
+                    color: Colors.white,
+                  ),
+                  child: Text('Loading Users'),
+                ),
+              );
+            case ConnectionState.done:
+              if (usersnap.hasError) return Text('Error: ${usersnap.error}');
+              if (usersnap.data.length == 0) {
+                return Center(
+                    child: Text(
+                  "No users to show",
+                  style: TextStyle(
+                      color: Colors.white, fontSize: size.height * 0.02),
+                ));
+              } else {
+                return Stack(
+                  children: [
+                    ListView.builder(
+                      itemCount: usersnap.data.length,
+                      itemBuilder: (context, position) {
+                        return buildUser(
+                          size,
+                          usersnap.data[position],
+                        ); //builds paper per item in the list from db
+                      },
                     ),
-                  );
-                case ConnectionState.done:
-                  if (usersnap.hasError)
-                    return Text('Error: ${usersnap.error}');
-                  if (usersnap.data.length == 0) {
-                    return Center(
-                        child: Text(
-                      "No users to show",
-                      style: TextStyle(
-                          color: Colors.white, fontSize: size.height * 0.02),
-                    ));
-                  } else {
-                    return ListView.builder(
-                        itemCount: usersnap.data.length,
-                        itemBuilder: (context, position) {
-                          return buildUser(
-                            size,
-                            usersnap.data[position],
-                          ); //builds paper per item in the list from db
-                        });
-                  }
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: buildMe(leaderboardController.getmyScore(), size),
+                    ),
+                  ],
+                );
               }
-              return null;
-            },
-            // padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-          ),
-          FutureBuilder(
-            future: leaderboardController.getmyScore(),
-            builder: (context, usersnap) {
-              switch (usersnap.connectionState) {
-                case ConnectionState.none: //if there's no papers in database
-                case ConnectionState.active:
-                case ConnectionState.waiting: //show while papers are loading
-                case ConnectionState.done:
-                  if (usersnap.hasError)
-                    return Text('Error: ${usersnap.error}');
-                  return Align(
-                    alignment: Alignment.bottomCenter,
-                    child: buildMe(usersnap.data, size),
-                  );
-              }
-              return null;
-            },
-          ),
-        ],
+          }
+          return null;
+        },
+        // padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
       ),
     );
   }
