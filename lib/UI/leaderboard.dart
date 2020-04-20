@@ -149,10 +149,7 @@ class LeaderboardPage extends StatelessWidget {
                 ]),
           ),
           title: Text(
-            user.name.toString() +
-                "\n" +
-                "0" +
-                user.number.toString().substring(3),
+            user.name.toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColor.colors[1].color,
@@ -205,10 +202,7 @@ class LeaderboardPage extends StatelessWidget {
                   ]),
             ),
             title: Text(
-              user.name.toString() +
-                  "\n" +
-                  "0" +
-                  user.number.toString().substring(3),
+              user.name.toString(),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppColor.colors[1].color,
