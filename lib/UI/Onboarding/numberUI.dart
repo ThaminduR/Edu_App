@@ -1,6 +1,5 @@
 import 'package:edu_app/Controllers/LoginController.dart';
 import 'package:edu_app/UI/Onboarding/otpUI.dart';
-import 'package:edu_app/UI/Onboarding/nameUI.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

@@ -3,10 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/Controllers/LoginController.dart';
 
-import '../home.dart';
-
 class OTPPage extends StatefulWidget {
-  String actualCode;
+  final String actualCode;
   OTPPage({
     Key key,
     @required this.actualCode,
@@ -152,7 +150,7 @@ class OTPPageState extends State<OTPPage> {
     print(smsCode);
     print("verification id in otp page");
     print(widget.actualCode);
-    AuthCredential phoneAuthCredential = await PhoneAuthProvider.getCredential(
+    AuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(
         verificationId: widget.actualCode, smsCode: smsCode);
     FirebaseAuth.instance
         .signInWithCredential(phoneAuthCredential)

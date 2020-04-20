@@ -1,5 +1,4 @@
 import 'package:edu_app/Controllers/leaderboardController.dart';
-import 'package:edu_app/Datalayer/Database.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +18,6 @@ class LeaderboardPage extends StatelessWidget {
   final LeaderboardController leaderboardController = LeaderboardController();
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: Text('ප්‍රමුඛ පුවරුව | Leaderboard'),
@@ -43,10 +41,7 @@ class LeaderboardPage extends StatelessWidget {
   }
 
   Widget buildScreen(context) {
-    Firebase db = Firebase.getdb();
     var size = MediaQuery.of(context).size;
-    List list = [];
-    //db.getUsers();
     return Container(
       child: FutureBuilder(
         future: leaderboardController.getLBUserList(),

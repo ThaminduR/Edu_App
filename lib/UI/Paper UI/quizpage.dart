@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:edu_app/Datalayer/paper.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/Paper UI/quizfinish.dart';
