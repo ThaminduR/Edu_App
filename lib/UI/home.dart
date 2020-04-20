@@ -41,7 +41,7 @@ class HomePageState extends State<HomePage> {
               size.width * 0.02,
               size.height * 0.02,
               size.width * 0.02,
-              size.height * 0.05,
+              size.height * 0.04,
             ),
             child: Column(
               children: <Widget>[

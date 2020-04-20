@@ -1,5 +1,5 @@
-import 'package:edu_app/UI/Onboarding/numberUI.dart';
 import 'package:edu_app/UI/colors.dart';
+import 'package:edu_app/UI/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'onboardingScreens.dart';
@@ -62,7 +62,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
                 child: FloatingActionButton.extended(
                   onPressed: () {
                     Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                        builder: (context) => new NumberPage()));
+                        builder: (context) => new Splash()));
                   },
                   backgroundColor: AppColor.colors[1].color,
                   label: Icon(Icons.arrow_forward),

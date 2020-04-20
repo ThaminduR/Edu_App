@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:edu_app/Controllers/LoginController.dart';
+import 'package:edu_app/Controllers/connectivityController.dart';
 import 'package:edu_app/UI/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
@@ -13,20 +14,27 @@ class Splash extends StatefulWidget {
 }
 
 class SplashState extends State<Splash> {
-  Future checkFirstSeen() async {
+  bool isConnected = false;
+  bool tryAgain = false;
+  ConnectivityController connectivityController = ConnectivityController();
+
+  Future<void> checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     LoginController loginController = LoginController();
+    this.isConnected = await connectivityController.checkConnection();
     bool _seen = (prefs.getBool('seen') ?? false);
     bool islogged = await loginController.isLogged();
-    // var name = (prefs.getString('name') ?? '');
-    // var number = (prefs.getString('number') ?? '');
     if (_seen) {
-      if (!islogged) {
-        Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(builder: (context) => new NumberPage()));
+      if (this.isConnected) {
+        if (!islogged) {
+          Navigator.of(context).pushReplacement(
+              new MaterialPageRoute(builder: (context) => new NumberPage()));
+        } else {
+          Navigator.of(context).pushReplacement(
+              new MaterialPageRoute(builder: (context) => new HomePage()));
+        }
       } else {
-        Navigator.of(context).pushReplacement(
-            new MaterialPageRoute(builder: (context) => new HomePage()));
+        checkInternet();
       }
     } else {
       prefs.setBool('seen', true);
@@ -47,6 +55,7 @@ class SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    // this.isConnected = Provider.of<bool>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
@@ -65,25 +74,69 @@ class SplashState extends State<Splash> {
             ],
           ),
         ),
-        child: Center(
-          child: Column(
-            children: [
-              Text(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Center(
+              child: Text(
                 'Grade 5',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: size.height * 0.06,
                 ),
               ),
-              Text(
-                'Loading ...',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: size.height * 0.04,
-                ),
+            ),
+            SizedBox(
+              height: size.height * 0.03,
+            ),
+            Text(
+              'Loading information ...',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: size.height * 0.02,
               ),
-            ],
-          ),
+            ),
+            LinearProgressIndicator(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void checkInternet() async {
+    this.isConnected = await connectivityController.checkConnection();
+    if (!this.isConnected) {
+      showAlert(context);
+    } else {
+      print("hello");
+      Navigator.of(context).pushReplacement(
+          new MaterialPageRoute(builder: (context) => new Splash()));
+    }
+    if (tryAgain != !this.isConnected) {
+      setState(() => tryAgain = !this.isConnected);
+    } else {
+      Navigator.pop(context);
+    }
+  }
+
+  void showAlert(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => Container(
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            AlertDialog(
+              title: Text("Connection Failed !"),
+              content: Text("Please check your internet connection !"),
+            ),
+            RaisedButton(
+                child: Text("Try Again !"),
+                onPressed: () {
+                  checkInternet();
+                })
+          ],
         ),
       ),
     );
