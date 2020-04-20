@@ -1,6 +1,6 @@
 import 'package:edu_app/Datalayer/Database.dart';
 import 'package:edu_app/Datalayer/LocalDB.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Paper {
   DBProvider dbProvider = new DBProvider();
@@ -32,20 +32,25 @@ class Paper {
     this.url = url;
   }
 
-  void saveAnswers(answers, correct) async {
+  Future<void> saveAnswers(answers, correct) async {
     Firebase db = Firebase.getdb();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var user = prefs.getString('number');
-    if (await db.firstTime(user, this.id)) {
-      db.uploadAnswers(user,this, answers, correct);
-    }
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseuser = await firebaseAuth.currentUser();
+    var user = firebaseuser.uid;
+    // if (await db.firstTime(user, this.id)) {
+    db.uploadAnswers(user, this, answers, correct);
+    // }
   }
 
-  void updateScore(correct) async {
+  Future<void> updateScore(correct) async {
     Firebase db = Firebase.getdb();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var user = prefs.getString('number');
-    if (await db.firstTime(user, this.id)) {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseuser = await firebaseAuth.currentUser();
+    String user = firebaseuser.phoneNumber;
+    String uid = firebaseuser.uid;
+    bool firsttime = await db.firstTime(uid, this.id);
+    if (firsttime) {
+      print(firsttime);
       db.updateLeaderboard(user, correct);
     }
   }

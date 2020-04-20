@@ -205,6 +205,7 @@ class _QuizPageState extends State<QuizPage>
                                       fontWeight: FontWeight.w500,
                                       color: Colors.white),
                                 ),
+                                activeColor: Colors.white,
                                 groupValue: _answers[_currentIndex],
                                 value: option.t,
                                 onChanged: (value) {

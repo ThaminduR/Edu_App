@@ -3,11 +3,11 @@ import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/Paper UI/reviewanswers.dart';
 import 'package:flutter/material.dart';
 
-class QuizFinishedPage extends StatelessWidget {
+class QuizFinishedPage extends StatefulWidget {
   final List<Question> questions;
   final Map<int, dynamic> answers;
   final Paper paper;
-  
+
   QuizFinishedPage({
     Key key,
     @required this.questions,
@@ -15,17 +15,30 @@ class QuizFinishedPage extends StatelessWidget {
     @required this.paper,
   }) : super(key: key);
 
+  QuizFinishedPageState createState() => QuizFinishedPageState();
+}
+
+class QuizFinishedPageState extends State<QuizFinishedPage> {
+  int correct;
+  List<Question> questions;
+  Map<int, dynamic> answers;
+
+  @override
+  void initState() {
+    super.initState();
+    this.questions = widget.questions;
+    this.answers = widget.answers;
+    correct = widget.paper.countAnswers(widget.answers);
+    widget.paper.saveAnswers(widget.answers, correct);
+    widget.paper.updateScore(correct);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // int correct = 0;
-    // this.answers.forEach((index, value) {
-    //   if (this.questions[index].as[questions[index].a - 1].t == value)
-    //     correct++;
-    // });
-    int correct = paper.countAnswers(this.answers);
-    this.paper.saveAnswers(this.answers, correct);
-    this.paper.updateScore(correct);
+    // int correct = widget.paper.countAnswers(widget.answers);
+    // widget.paper.saveAnswers(widget.answers, correct);
+    // widget.paper.updateScore(correct);
     final TextStyle titleStyle = TextStyle(
         color: Colors.black87, fontSize: 22.0, fontWeight: FontWeight.w500);
     final TextStyle trailingStyle = TextStyle(
@@ -75,7 +88,8 @@ class QuizFinishedPage extends StatelessWidget {
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16.0),
                   title: Text("Score", style: titleStyle),
-                  trailing: Text("${correct / questions.length * 100}%",
+                  trailing: Text(
+                      "${this.correct / widget.questions.length * 100}%",
                       style: trailingStyle),
                 ),
               ),
@@ -86,7 +100,7 @@ class QuizFinishedPage extends StatelessWidget {
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16.0),
                   title: Text("Correct Answers", style: titleStyle),
-                  trailing: Text("$correct/${questions.length}",
+                  trailing: Text("${this.correct} / ${questions.length}",
                       style: trailingStyle),
                 ),
               ),
@@ -98,7 +112,7 @@ class QuizFinishedPage extends StatelessWidget {
                   contentPadding: const EdgeInsets.all(16.0),
                   title: Text("Incorrect Answers", style: titleStyle),
                   trailing: Text(
-                      "${questions.length - correct}/${questions.length}",
+                      "${widget.questions.length - this.correct} / ${widget.questions.length}",
                       style: trailingStyle),
                 ),
               ),
@@ -138,9 +152,4 @@ class QuizFinishedPage extends StatelessWidget {
       ),
     );
   }
-
-  // void firstTimeInit(user) async {
-  //   bool b = await paper.checkFirstTime(user);
-  //   this.firsttime = b;
-  // }
 }

@@ -1,8 +1,8 @@
+import 'package:edu_app/Controllers/progressController.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:edu_app/Datalayer/Database.dart';
 
 class ProgressPageRoute extends CupertinoPageRoute {
   ProgressPageRoute()
@@ -16,6 +16,7 @@ class ProgressPageRoute extends CupertinoPageRoute {
 }
 
 class ProgressPage extends StatelessWidget {
+  final ProgressController progressController = ProgressController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -45,25 +46,68 @@ class ProgressPage extends StatelessWidget {
               ],
             ),
           ),
-          child: buildProgress(size),
+          child: FutureBuilder(
+              future: progressController.getPaperList(),
+              builder: (context, papersnapshot) {
+                switch (papersnapshot.connectionState) {
+                  case ConnectionState.none: //if there's no papers in database
+                    return Text('No Papers to show');
+                  case ConnectionState.active:
+                  case ConnectionState.waiting: //show while papers are loading
+                    return Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        size.width * 0.35,
+                        size.height * 0.425,
+                        size.width * 0.35,
+                        size.height * 0.425,
+                      ),
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: size.height * 0.05,
+                        width: size.width * 0.3,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.white,
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Text('Loading Papers'),
+                      ),
+                    );
+                  case ConnectionState.done:
+                    if (papersnapshot.hasError)
+                      return Text('Error: ${papersnapshot.error}');
+                    if (papersnapshot.data.length == 0) {
+                      return Center(
+                          child: Text(
+                        "You haven't done any papers",
+                        style: TextStyle(
+                            color: Colors.white, fontSize: size.height * 0.02),
+                      ));
+                    } else {
+                      return buildProgress(papersnapshot.data, size);
+                    }
+                }
+                return null;
+              }),
         ),
       ),
     );
   }
 
-  Widget buildProgress(size) {
-    List list = ["Paper 1", "Paper 2"];
+  Widget buildProgress(paperlist, size) {
     return Container(
       child: ListView.builder(
-        itemCount: list.length,
+        itemCount: paperlist.length,
         itemBuilder: (context, position) {
-          return buildPaperProgress(size, list, position);
+          return buildPaperProgress(size, paperlist[position]);
         },
       ),
     );
   }
 
-  Widget buildPaperProgress(size, list, position) {
+  Widget buildPaperProgress(size, paper) {
     return Padding(
       padding: EdgeInsets.fromLTRB(size.width * 0.08, size.height * 0.02,
           size.width * 0.08, size.height * 0.02),
@@ -74,7 +118,7 @@ class ProgressPage extends StatelessWidget {
         ),
         child: ExpansionTile(
           title: Text(
-            list[position],
+            "Paper " + paper.paperid,
             style: TextStyle(
               color: Colors.white,
               fontSize: size.height * 0.025,
@@ -90,11 +134,11 @@ class ProgressPage extends StatelessWidget {
                   width: 250,
                   animation: true,
                   lineHeight: 20.0,
-                  animationDuration: 2000,
-                  percent: 0.9,
-                  center: Text("90.0%"),
+                  animationDuration: 1000,
+                  percent: (paper.marks / 5),
+                  center: Text('${(paper.marks / 5) * 100}' + "%"),
                   linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: AppColor.colors[2].color,
+                  progressColor: Colors.white,
                 ),
               ),
             ),

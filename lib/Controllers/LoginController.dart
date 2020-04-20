@@ -2,7 +2,6 @@ import 'package:edu_app/UI/Onboarding/nameUI.dart';
 import 'package:edu_app/UI/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:edu_app/Datalayer/Database.dart';
 
 class LoginController {
@@ -39,5 +38,10 @@ class LoginController {
       return true;
     }
     return false;
+  }
+
+  Future<void> logout() async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    firebaseAuth.signOut();
   }
 }
