@@ -48,7 +48,7 @@ class LeaderboardPage extends StatelessWidget {
         builder: (context, usersnap) {
           switch (usersnap.connectionState) {
             case ConnectionState.none: //if there's no papers in database
-              return Text('No Users to show');
+              return Text('No internet connection');
             case ConnectionState.active:
             case ConnectionState.waiting: //show while papers are loading
               return Padding(

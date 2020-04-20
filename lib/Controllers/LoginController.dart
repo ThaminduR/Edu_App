@@ -3,6 +3,7 @@ import 'package:edu_app/UI/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/Datalayer/Database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController {
   Firebase _database = Firebase.getdb();
@@ -12,7 +13,8 @@ class LoginController {
     FirebaseUser user = await firebaseAuth.currentUser();
     String uid = user.uid;
     String number = user.phoneNumber;
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('username', name);
     _database.addUser(uid, name, number);
   }
 
@@ -40,8 +42,15 @@ class LoginController {
     return false;
   }
 
+  Future<bool> usernamUnique(name) async {
+    Firebase db = Firebase.getdb();
+    return db.checkUsername(name);
+  }
+
   Future<void> logout() async {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     firebaseAuth.signOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('username');
   }
 }

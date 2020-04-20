@@ -21,9 +21,15 @@ class SplashState extends State<Splash> {
   Future<void> checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     LoginController loginController = LoginController();
+
     this.isConnected = await connectivityController.checkConnection();
     bool _seen = (prefs.getBool('seen') ?? false);
-    bool islogged = await loginController.isLogged();
+    bool islogged1 = await loginController.isLogged();
+    bool islogged = false;
+    if (prefs.containsKey('username') && islogged1) {
+      islogged = true;
+    }
+
     if (_seen) {
       if (this.isConnected) {
         if (!islogged) {
@@ -106,9 +112,8 @@ class SplashState extends State<Splash> {
   void checkInternet() async {
     this.isConnected = await connectivityController.checkConnection();
     if (!this.isConnected) {
-      showAlert(context);
+      showAlert(context, context.size);
     } else {
-      print("hello");
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new Splash()));
     }
@@ -119,24 +124,31 @@ class SplashState extends State<Splash> {
     }
   }
 
-  void showAlert(BuildContext context) {
+  void showAlert(BuildContext context, size) {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => Container(
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            AlertDialog(
-              title: Text("Connection Failed !"),
-              content: Text("Please check your internet connection !"),
-            ),
-            RaisedButton(
-                child: Text("Try Again !"),
-                onPressed: () {
-                  checkInternet();
-                })
-          ],
+      builder: (context) => AlertDialog(
+        title: Text(
+          "Connection Failed !",
+          textAlign: TextAlign.center,
+        ),
+        content: Container(
+          height: size.height * 0.1,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Please check your internet connection !",
+                textAlign: TextAlign.center,
+              ),
+              RaisedButton(
+                  child: Text("Try Again !"),
+                  onPressed: () {
+                    checkInternet();
+                  })
+            ],
+          ),
         ),
       ),
     );

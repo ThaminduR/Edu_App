@@ -17,31 +17,47 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(MyApp());
+  runApp(MaterialApp(
+    title: "පහේ පන්තිය",
+    theme: ThemeData(
+        //Colors are defined in AppColor class
+        primaryColor: AppColor.colors[0].color,
+        primaryColorDark: AppColor.colors[0].color,
+        fontFamily: 'Ubuntu'),
+    initialRoute: '/',
+    routes: {
+      '/': (context) =>
+          Splash(), //Splash screen determines whether to show onboarding or home
+      '/onBoarding': (context) =>
+          OnBoardingPage(), //Onboarding is showed only once. Implemented using saved preferences
+      '/home': (context) => HomePage(),
+      PaperScreen.routeName: (context) => PaperScreen(),
+    },
+  ));
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamProvider<bool>(
-        builder: (context) =>
-            ConnectivityController().connectionStatusController,
-        child: MaterialApp(
-          title: "පහේ පන්තිය",
-          theme: ThemeData(
-              //Colors are defined in AppColor class
-              primaryColor: AppColor.colors[0].color,
-              primaryColorDark: AppColor.colors[0].color,
-              fontFamily: 'Ubuntu'),
-          initialRoute: '/',
-          routes: {
-            '/': (context) =>
-                Splash(), //Splash screen determines whether to show onboarding or home
-            '/onBoarding': (context) =>
-                OnBoardingPage(), //Onboarding is showed only once. Implemented using saved preferences
-            '/home': (context) => HomePage(),
-            PaperScreen.routeName: (context) => PaperScreen(),
-          },
-        ));
-  }
-}
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return StreamProvider<bool>(
+//         builder: (context) =>
+//             ConnectivityController().connectionStatusController,
+//         child: MaterialApp(
+//           title: "පහේ පන්තිය",
+//           theme: ThemeData(
+//               //Colors are defined in AppColor class
+//               primaryColor: AppColor.colors[0].color,
+//               primaryColorDark: AppColor.colors[0].color,
+//               fontFamily: 'Ubuntu'),
+//           initialRoute: '/',
+//           routes: {
+//             '/': (context) =>
+//                 Splash(), //Splash screen determines whether to show onboarding or home
+//             '/onBoarding': (context) =>
+//                 OnBoardingPage(), //Onboarding is showed only once. Implemented using saved preferences
+//             '/home': (context) => HomePage(),
+//             PaperScreen.routeName: (context) => PaperScreen(),
+//           },
+//         ));
+//   }
+// }

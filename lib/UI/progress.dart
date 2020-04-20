@@ -1,3 +1,4 @@
+import 'package:edu_app/Controllers/connectivityController.dart';
 import 'package:edu_app/Controllers/progressController.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +18,8 @@ class ProgressPageRoute extends CupertinoPageRoute {
 
 class ProgressPage extends StatelessWidget {
   final ProgressController progressController = ProgressController();
+  final ConnectivityController connectivityController =
+      ConnectivityController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -51,7 +54,7 @@ class ProgressPage extends StatelessWidget {
               builder: (context, papersnapshot) {
                 switch (papersnapshot.connectionState) {
                   case ConnectionState.none: //if there's no papers in database
-                    return Text('No Papers to show');
+                    return Text('No Connection !');
                   case ConnectionState.active:
                   case ConnectionState.waiting: //show while papers are loading
                     return Padding(
@@ -147,41 +150,4 @@ class ProgressPage extends StatelessWidget {
       ),
     );
   }
-
-  // void checkInternet() {
-  //   if (!this.isConnected) {
-  //     showAlert(context);
-  //   } else {
-  //     Navigator.of(context).pushReplacement(
-  //         new MaterialPageRoute(builder: (context) => new Splash()));
-  //   }
-  //   if (tryAgain != !this.isConnected) {
-  //     setState(() => tryAgain = !this.isConnected);
-  //   } else {
-  //     Navigator.pop(context);
-  //   }
-  // }
-
-  // void showAlert(BuildContext context) {
-  //   showDialog(
-  //     barrierDismissible: false,
-  //     context: context,
-  //     builder: (context) => Container(
-  //       alignment: Alignment.center,
-  //       child: Column(
-  //         children: [
-  //           AlertDialog(
-  //             title: Text("Connection Failed !"),
-  //             content: Text("Please check your internet connection !"),
-  //           ),
-  //           RaisedButton(
-  //               child: Text("Try Again !"),
-  //               onPressed: () {
-  //                 checkInternet();
-  //               })
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 }

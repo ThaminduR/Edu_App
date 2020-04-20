@@ -12,7 +12,11 @@ class NamePageState extends State<NamePage> {
   final _formKey = new GlobalKey<FormState>();
   final nametextcontroller = TextEditingController();
   final loginController = LoginController();
-  String status = '';
+  // String status = '';
+  bool _first = true;
+  bool _isLoggedIn = false;
+  bool _isInAsyncCall = false;
+  bool _isInvalidAsyncUser = false;
 
   void dispose() {
     nametextcontroller.dispose();
@@ -21,6 +25,7 @@ class NamePageState extends State<NamePage> {
 
   @override
   Widget build(BuildContext context) {
+    _formKey.currentState?.validate();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
@@ -90,18 +95,18 @@ class NamePageState extends State<NamePage> {
                         controller: nametextcontroller,
                         decoration: new InputDecoration(
                           labelText: "Username",
-                          //fillColor: Colors.white,
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
                             borderSide: new BorderSide(),
                           ),
                         ),
                         validator: (val) {
-                          if (val.length < 6) {
-                            return "Invalid length";
+                          if (!_first) {
+                            return validateName(val);
                           } else {
-                            return null;
+                            _first = false;
                           }
+                          return null;
                         },
                         keyboardType: TextInputType.text,
                         style: new TextStyle(),
@@ -130,11 +135,29 @@ class NamePageState extends State<NamePage> {
               onPressed: () => {
                 if (_formKey.currentState.validate())
                   {
-                    loginController
-                        .savelogin(nametextcontroller.text.toString()),
-                    Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                        builder: (context) => new HomePage()))
-                  },
+                    _formKey.currentState.save(),
+                    FocusScope.of(context).requestFocus(new FocusNode()),
+                    setState(() {
+                      _isInAsyncCall = true;
+                    }),
+                    Future.delayed(Duration(milliseconds: 10), () async {
+                      bool isUnique = await loginController
+                          .usernamUnique(nametextcontroller.text);
+                      setState(() {
+                        if (isUnique) {
+                          _isInvalidAsyncUser = false;
+                          _isLoggedIn = true;
+                        } else {
+                          _isInvalidAsyncUser = true;
+                        }
+                      });
+                      _isInAsyncCall = false;
+                    }),
+                    if (_isLoggedIn)
+                      {
+                        log(),
+                      }
+                  }
               },
               label: Text("Submit"),
             )
@@ -142,5 +165,25 @@ class NamePageState extends State<NamePage> {
         ),
       ),
     );
+  }
+
+  log() {
+    loginController.savelogin(nametextcontroller.text.toString());
+    Navigator.of(context).pushReplacement(
+        new MaterialPageRoute(builder: (context) => new HomePage()));
+  }
+
+  String validateName(String name) {
+    if (name.length == 0) {
+      return 'Please enter a valid username';
+    }
+    if (name.length < 6) {
+      return 'Invalid length';
+    }
+    if (_isInvalidAsyncUser) {
+      _isInvalidAsyncUser = false;
+      return 'Username Already Exists';
+    }
+    return null;
   }
 }
