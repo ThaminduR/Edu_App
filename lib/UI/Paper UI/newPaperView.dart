@@ -41,12 +41,11 @@ class NewPaperPageState extends State<NewPaperPage> {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              AppColor.colors[1].color,
-              AppColor.colors[3].color,
-              AppColor.colors[3].color,
-              AppColor.colors[3].color,
+              Colors.cyanAccent[700],
+              Colors.cyanAccent[400],
+              Colors.cyanAccent,
             ],
           ),
         ),
@@ -56,7 +55,10 @@ class NewPaperPageState extends State<NewPaperPage> {
           builder: (context, paperSnap) {
             switch (paperSnap.connectionState) {
               case ConnectionState.none: //if there's no papers in database
-                return Text('No connection !');
+                return Text(
+                  'No connection !',
+                  style: TextStyle(color: Colors.teal[800]),
+                );
               case ConnectionState.active:
               case ConnectionState.waiting: //show while papers are loading
                 return Padding(
@@ -77,13 +79,18 @@ class NewPaperPageState extends State<NewPaperPage> {
                       ),
                       color: Colors.white,
                     ),
-                    child: Text('Loading Papers'),
+                    child: Text(
+                      'Loading Papers',
+                      style: TextStyle(color: Colors.teal[800]),
+                    ),
                   ),
                 );
               case ConnectionState.done:
                 if (paperSnap.hasError)
                   return Text(
-                      'Connection Error. Please check your internet connection !');
+                    'Connection Error. Please check your internet connection !',
+                    style: TextStyle(color: Colors.teal[800]),
+                  );
                 return ListView.builder(
                   itemCount: paperSnap.data.length,
                   itemBuilder: (context, position) {
@@ -110,7 +117,7 @@ class NewPaperPageState extends State<NewPaperPage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: AppColor.colors[1].color,
+            color: AppColor.colors[6].color,
             //color: Color.fromRGBO(36, 209, 99, 0.9),
           ),
           color: Colors.white,
@@ -124,7 +131,7 @@ class NewPaperPageState extends State<NewPaperPage> {
                 Text(
                   'Question Paper ${paper.number}', // paper id here
                   style: TextStyle(
-                    color: AppColor.colors[1].color,
+                    color: AppColor.colors[6].color,
                     fontSize: size.height * 0.02,
                   ),
                 ),
@@ -134,14 +141,14 @@ class NewPaperPageState extends State<NewPaperPage> {
             Container(
               decoration: BoxDecoration(
                   border: Border.all(
-                color: AppColor.colors[1].color,
+                color: AppColor.colors[6].color,
               )),
               child: FlatButton(
                   color: Colors.white,
                   child: Text(
                     'Download the paper',
                     style: TextStyle(
-                      color: AppColor.colors[1].color,
+                      color: AppColor.colors[6].color,
                     ),
                   ),
                   onPressed: () async {
@@ -205,7 +212,7 @@ class NewPaperPageState extends State<NewPaperPage> {
           textAlign: TextAlign.center,
         ),
         content: Container(
-          height: size.height * 0.1,
+          height: size.height * 0.2,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -214,9 +221,22 @@ class NewPaperPageState extends State<NewPaperPage> {
                 textAlign: TextAlign.center,
               ),
               RaisedButton(
-                  child: Text("Try Again !"),
+                  color: Colors.teal[800],
+                  child: Text(
+                    "Try Again !",
+                    style: TextStyle(color: Colors.white),
+                  ),
                   onPressed: () {
                     tryAgain();
+                  }),
+              RaisedButton(
+                  color: Colors.teal[800],
+                  child: Text(
+                    "Okay",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
                   })
             ],
           ),

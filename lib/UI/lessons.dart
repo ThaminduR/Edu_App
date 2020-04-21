@@ -26,12 +26,11 @@ class LessonsPage extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              stops: [0.1, 0.5, 0.7, 0.9],
+              stops: [0.1, 0.4, 0.9],
               colors: [
-                Colors.blue[800],
-                Colors.blue[700],
-                Colors.blue[600],
-                Colors.blue[400],
+                Colors.cyanAccent[700],
+                Colors.cyanAccent[400],
+                Colors.cyanAccent,
               ],
             ),
           ),
@@ -42,7 +41,7 @@ class LessonsPage extends StatelessWidget {
                 child: Text(
                   "Coming Soon !",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.teal[800],
                     fontSize: size.height * 0.03,
                   ),
                 ),

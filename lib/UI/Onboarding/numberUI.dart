@@ -29,12 +29,11 @@ class NumberPageState extends State<NumberPage> {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              Colors.blue[800],
-              Colors.blue[700],
-              Colors.blue[600],
-              Colors.blue[400],
+              Colors.cyanAccent[700],
+              Colors.cyanAccent[400],
+              Colors.cyanAccent,
             ],
           ),
         ),
@@ -46,7 +45,7 @@ class NumberPageState extends State<NumberPage> {
                   color: Colors.black38,
                   offset: new Offset(2.0, 2.0),
                 )
-              ], color: AppColor.colors[1].color),
+              ], color: AppColor.colors[6].color),
               child: Column(
                 children: <Widget>[
                   Container(
@@ -118,7 +117,7 @@ class NumberPageState extends State<NumberPage> {
                       child: Text(
                         "Ex - 07712312345",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.teal[800],
                         ),
                       ),
                     ),
@@ -132,7 +131,7 @@ class NumberPageState extends State<NumberPage> {
                       child: Text(
                         this.status,
                         style: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.025),
+                            color: Colors.teal[800], fontSize: size.height * 0.025),
                       ),
                     ),
                   ],
@@ -140,7 +139,7 @@ class NumberPageState extends State<NumberPage> {
               ),
             ),
             FloatingActionButton.extended(
-              backgroundColor: AppColor.colors[1].color,
+              backgroundColor: AppColor.colors[6].color,
               onPressed: () => {
                 if (_formKey.currentState.validate())
                   {

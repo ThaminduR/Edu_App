@@ -20,19 +20,18 @@ class LeaderboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ප්‍රමුඛ පුවරුව | Leaderboard'),
+        title: Text('Leaderboard'),
       ),
       body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              stops: [0.1, 0.5, 0.7, 0.9],
+              stops: [0.1, 0.4, 0.9],
               colors: [
-                Colors.blue[800],
-                Colors.blue[700],
-                Colors.blue[600],
-                Colors.blue[400],
+                Colors.cyan[700],
+                Colors.cyan[400],
+                Colors.cyan,
               ],
             ),
           ),
@@ -116,30 +115,32 @@ class LeaderboardPage extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: AppColor.colors[1].color,
+            color: Colors.teal[800],
             //color: Color.fromRGBO(36, 209, 99, 0.9),
           ),
           color: Colors.white,
         ),
         child: ListTile(
-          leading: Text(
-            user.rank.toString(),
-            style: TextStyle(
-              fontSize: 20,
-              color: Colors.green[900],
-            ),
-          ),
+          leading: (user.rank != 0)
+              ? Text(
+                  user.rank.toString(),
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.green[900],
+                  ),
+                )
+              : Icon(Icons.account_circle),
           trailing: Container(
             width: size.width * 0.2,
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(Icons.grade,
-                      color: AppColor.colors[3].color, size: 24.0),
+                  Icon(Icons.whatshot,
+                      color: AppColor.colors[6].color, size: 24.0),
                   Text(user.totalScore.toString(),
                       style: TextStyle(
                         fontSize: 20,
-                        color: AppColor.colors[1].color,
+                        color: AppColor.colors[6].color,
                       )),
                 ]),
           ),
@@ -147,7 +148,7 @@ class LeaderboardPage extends StatelessWidget {
             user.name.toString(),
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: AppColor.colors[1].color,
+              color: AppColor.colors[6].color,
               fontSize: 20,
             ),
           ),
@@ -160,7 +161,7 @@ class LeaderboardPage extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: AppColor.colors[5].color,
+        color: Colors.teal[900],
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(size.width * 0.08, size.height * 0.02,
@@ -169,8 +170,7 @@ class LeaderboardPage extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: AppColor.colors[1].color,
-              //color: Color.fromRGBO(36, 209, 99, 0.9),
+              color: AppColor.colors[6].color,
             ),
             color: Colors.white,
           ),
@@ -179,7 +179,7 @@ class LeaderboardPage extends StatelessWidget {
               user.rank.toString(),
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.green[900],
+                color: Colors.teal[800],
               ),
             ),
             trailing: Container(
@@ -187,12 +187,12 @@ class LeaderboardPage extends StatelessWidget {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Icon(Icons.grade,
-                        color: AppColor.colors[3].color, size: 24.0),
+                    Icon(Icons.whatshot,
+                        color: AppColor.colors[6].color, size: 24.0),
                     Text(user.totalScore.toString(),
                         style: TextStyle(
                           fontSize: 20,
-                          color: AppColor.colors[1].color,
+                          color: AppColor.colors[6].color,
                         )),
                   ]),
             ),
@@ -200,7 +200,7 @@ class LeaderboardPage extends StatelessWidget {
               user.name.toString(),
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: AppColor.colors[1].color,
+                color: AppColor.colors[6].color,
                 fontSize: 20,
               ),
             ),

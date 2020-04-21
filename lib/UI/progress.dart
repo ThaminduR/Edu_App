@@ -36,12 +36,11 @@ class ProgressPage extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              stops: [0.1, 0.5, 0.7, 0.9],
+              stops: [0.1, 0.4, 0.9],
               colors: [
-                Colors.blue[800],
-                Colors.blue[700],
-                Colors.blue[600],
-                Colors.blue[400],
+                Colors.cyanAccent[700],
+                Colors.cyanAccent[400],
+                Colors.cyanAccent,
               ],
             ),
           ),
@@ -50,7 +49,10 @@ class ProgressPage extends StatelessWidget {
               builder: (context, papersnapshot) {
                 switch (papersnapshot.connectionState) {
                   case ConnectionState.none: //if there's no papers in database
-                    return Text('No Connection !');
+                    return Text(
+                      'No Connection !',
+                      style: TextStyle(color: Colors.teal[800]),
+                    );
                   case ConnectionState.active:
                   case ConnectionState.waiting: //show while papers are loading
                     return Padding(
@@ -71,18 +73,25 @@ class ProgressPage extends StatelessWidget {
                           ),
                           color: Colors.white,
                         ),
-                        child: Text('Loading Papers'),
+                        child: Text(
+                          'Loading Papers',
+                          style: TextStyle(color: Colors.teal[800]),
+                        ),
                       ),
                     );
                   case ConnectionState.done:
                     if (papersnapshot.hasError)
-                      return Text('Error: ${papersnapshot.error}');
+                      return Text(
+                        'Error: ${papersnapshot.error}',
+                        style: TextStyle(color: Colors.teal[800]),
+                      );
                     if (papersnapshot.data.length == 0) {
                       return Center(
                           child: Text(
                         "You haven't done any papers",
                         style: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.02),
+                            color: Colors.teal[800],
+                            fontSize: size.height * 0.02),
                       ));
                     } else {
                       return buildProgress(papersnapshot.data, size);
@@ -113,7 +122,7 @@ class ProgressPage extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: AppColor.colors[0].color,
+          color: Colors.teal[900],
         ),
         child: ExpansionTile(
           title: Text(

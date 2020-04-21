@@ -55,12 +55,11 @@ class QuizFinishedPageState extends State<QuizFinishedPage> {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              Colors.blue[800],
-              Colors.blue[700],
-              Colors.blue[600],
-              Colors.blue[400],
+              Colors.teal[800],
+              Colors.teal[700],
+              Colors.teal[600],
             ],
           ),
         ),

@@ -64,7 +64,7 @@ class OnBoardingPageState extends State<OnBoardingPage> {
                     Navigator.of(context).pushReplacement(new MaterialPageRoute(
                         builder: (context) => new Splash()));
                   },
-                  backgroundColor: AppColor.colors[1].color,
+                  backgroundColor: AppColor.colors[6].color,
                   label: Icon(Icons.arrow_forward),
                 ),
               ),

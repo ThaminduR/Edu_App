@@ -60,24 +60,29 @@ class SplashState extends State<Splash> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.fromLTRB(size.width * 0.1, size.height * 0.4,
-            size.width * 0.1, size.height * 0.4),
+        padding: EdgeInsets.fromLTRB(size.width * 0.1, size.height * 0.2,
+            size.width * 0.1, size.height * 0.3),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              Colors.blue[800],
-              Colors.blue[700],
-              Colors.blue[600],
-              Colors.blue[400],
+              Colors.teal[700],
+              Colors.teal[400],
+              Colors.teal,
             ],
           ),
+          // image: DecorationImage(
+              
+          //     image: AssetImage(
+          //         'assets/images/boygirl2.png'), //image at the bottom of home page
+          //     fit: BoxFit.fitWidth),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Image.asset('assets/images/boygirl2.png'),
             Center(
               child: Text(
                 'Grade 5',
@@ -97,7 +102,10 @@ class SplashState extends State<Splash> {
                 fontSize: size.height * 0.02,
               ),
             ),
-            LinearProgressIndicator(),
+            LinearProgressIndicator(
+              backgroundColor: Colors.white,
+              valueColor: new AlwaysStoppedAnimation<Color>(Colors.teal[800]),
+            ),
           ],
         ),
       ),

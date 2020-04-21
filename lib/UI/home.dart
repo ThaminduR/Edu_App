@@ -22,7 +22,8 @@ class HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getUsername();
+    // username = await getUsername();
+
     Navigator.of(context).popUntil((route) => route.isFirst);
   }
 
@@ -31,24 +32,25 @@ class HomePageState extends State<HomePage> {
     Size size = MediaQuery.of(context).size; //get current device screen size
     double rowSpace = size.height * 0.02;
     double colSpace = size.width * 0.06;
-    Color tileColor = AppColor.colors[0].color;
+    Color tileColor = AppColor.colors[6].color;
+    // Colors.teal[800];
+    //
     return Scaffold(
         appBar: AppBar(
           title: Text('Grade 5'),
+          // centerTitle: true,
         ),
         body: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            // color: AppColor.colors[5].color,
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              stops: [0.1, 0.5, 0.7, 0.9],
+              stops: [0.1, 0.4, 0.9],
               colors: [
-                Colors.blue[800],
-                Colors.blue[700],
-                Colors.blue[600],
-                Colors.blue[400],
+                Colors.cyanAccent[700],
+                Colors.cyanAccent[400],
+                Colors.cyanAccent,
               ],
             ),
             image: DecorationImage(
@@ -66,11 +68,30 @@ class HomePageState extends State<HomePage> {
             ),
             child: Column(
               children: <Widget>[
-                Text(
-                  'Welcome ' + username,
-                  style: TextStyle(
-                      color: Colors.white, fontSize: size.height * 0.025),
-                ),
+                // Text(
+                //   "Welcome " + username,
+                //   style: TextStyle(
+                //       color: Colors.white,
+                //       fontSize: size.height * 0.025,
+                //       shadows: [
+                //         Shadow(
+                //             // bottomLeft
+                //             offset: Offset(-.5, -.5),
+                //             color: Colors.teal[900]),
+                //         Shadow(
+                //             // bottomRight
+                //             offset: Offset(.5, -.5),
+                //             color: Colors.teal[900]),
+                //         Shadow(
+                //             // topRight
+                //             offset: Offset(.5, .5),
+                //             color: Colors.teal[900]),
+                //         Shadow(
+                //             // topLeft
+                //             offset: Offset(-.5, .5),
+                //             color: Colors.teal[900]),
+                //       ]),
+                // ),
                 SizedBox(
                   height: rowSpace * 0.5,
                 ),
@@ -365,11 +386,10 @@ class HomePageState extends State<HomePage> {
         ));
   }
 
-  void getUsername() async {
+  Future<String> getUsername() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      this.username = prefs.getString('username');
-    });
-    print(username);
+    String _username = prefs.getString('username');
+    print(_username);
+    return _username;
   }
 }

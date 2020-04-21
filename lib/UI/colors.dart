@@ -12,6 +12,7 @@ class AppColor {
     const AppColor(const Color.fromRGBO(210, 198, 1666, 1), 'Dark Vanilla'),
     const AppColor(const Color.fromRGBO(84, 153, 206, 1), 'Light Blue 2'),
     const AppColor(const Color.fromRGBO(27, 152, 224, 1), 'Light Grey'),
-    const AppColor(const Color.fromRGBO(84, 153, 206, 0.9), 'Light light blue'),
+    const AppColor(const Color.fromRGBO(0, 97, 83, 1), 'Teal'),
+    const AppColor(const Color.fromRGBO(0, 97, 83, 0.8), 'Teal 0.8'),
   ];
 }

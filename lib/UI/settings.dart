@@ -32,19 +32,18 @@ class _SettingsPageState extends State<SettingsPage> {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Us'),
+        title: Text('Settings'),
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              Colors.blue[800],
-              Colors.blue[700],
-              Colors.blue[600],
-              Colors.blue[400],
+              Colors.cyanAccent[700],
+              Colors.cyanAccent[400],
+              Colors.cyanAccent,
             ],
           ),
         ),
@@ -53,7 +52,11 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               SizedBox(height: size.height * 0.1),
               RaisedButton(
-                child: Text("Logout"),
+                color: Colors.teal[900],
+                child: Text(
+                  "Logout",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () => {
                   loginController.logout(context),
                 },
@@ -63,7 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 child: Text(
                   "We are TechLabs",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.teal[800],
                     fontSize: size.height * 0.03,
                   ),
                 ),

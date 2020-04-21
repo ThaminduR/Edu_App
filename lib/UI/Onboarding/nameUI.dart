@@ -33,12 +33,11 @@ class NamePageState extends State<NamePage> {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              Colors.blue[800],
-              Colors.blue[700],
-              Colors.blue[600],
-              Colors.blue[400],
+              Colors.cyanAccent[700],
+              Colors.cyanAccent[400],
+              Colors.cyanAccent,
             ],
           ),
         ),
@@ -50,7 +49,7 @@ class NamePageState extends State<NamePage> {
                   color: Colors.black38,
                   offset: new Offset(2.0, 2.0),
                 )
-              ], color: AppColor.colors[1].color),
+              ], color: AppColor.colors[6].color),
               child: Column(
                 children: <Widget>[
                   Container(
@@ -125,7 +124,7 @@ class NamePageState extends State<NamePage> {
                       child: Text(
                         "Username should be atleast 6 characters long",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.teal[800],
                         ),
                       ),
                     ),
@@ -138,7 +137,7 @@ class NamePageState extends State<NamePage> {
               height: size.height * 0.05,
             ),
             FloatingActionButton.extended(
-              backgroundColor: AppColor.colors[1].color,
+              backgroundColor: AppColor.colors[6].color,
               onPressed: _isInAsyncCall
                   ? null
                   : () => {
@@ -150,7 +149,8 @@ class NamePageState extends State<NamePage> {
                             setState(() {
                               _isInAsyncCall = true;
                             }),
-                            Future.delayed(Duration(milliseconds: 500 ), () async {
+                            Future.delayed(Duration(milliseconds: 500),
+                                () async {
                               bool isUnique = await loginController
                                   .usernamUnique(nametextcontroller.text);
                               setState(() {
