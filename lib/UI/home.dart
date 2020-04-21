@@ -6,6 +6,7 @@ import 'package:edu_app/UI/Paper UI/paperListView.dart';
 import 'package:edu_app/UI/progress.dart';
 import 'package:edu_app/UI/lessons.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //Uncomment text fields to display Sinhala text
 //Uncomment decoration image to display children
@@ -16,25 +17,45 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  String username = 'User';
+
+  @override
+  void initState() {
+    super.initState();
+    getUsername();
+    Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; //get current device screen size
-    double rowSpace = size.height * 0.07;
+    double rowSpace = size.height * 0.02;
     double colSpace = size.width * 0.06;
     Color tileColor = AppColor.colors[0].color;
     return Scaffold(
         appBar: AppBar(
-          title: Text('Quiz App'),
+          title: Text('Grade 5'),
         ),
         body: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColor.colors[5].color,
-            // image: DecorationImage(
-            //     alignment: Alignment.bottomCenter,
-            //     image: AssetImage(
-            //         'assets/images/boygirl.png'), //image at the bottom of home page
-            //     fit: BoxFit.fitWidth),
+            // color: AppColor.colors[5].color,
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              stops: [0.1, 0.5, 0.7, 0.9],
+              colors: [
+                Colors.blue[800],
+                Colors.blue[700],
+                Colors.blue[600],
+                Colors.blue[400],
+              ],
+            ),
+            image: DecorationImage(
+                alignment: Alignment.bottomCenter,
+                image: AssetImage(
+                    'assets/images/boygirl.png'), //image at the bottom of home page
+                fit: BoxFit.fitWidth),
           ),
           child: Container(
             padding: EdgeInsets.fromLTRB(
@@ -45,8 +66,13 @@ class HomePageState extends State<HomePage> {
             ),
             child: Column(
               children: <Widget>[
+                Text(
+                  'Welcome ' + username,
+                  style: TextStyle(
+                      color: Colors.white, fontSize: size.height * 0.025),
+                ),
                 SizedBox(
-                  height: rowSpace,
+                  height: rowSpace * 0.5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -337,5 +363,13 @@ class HomePageState extends State<HomePage> {
             ),
           ),
         ));
+  }
+
+  void getUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      this.username = prefs.getString('username');
+    });
+    print(username);
   }
 }

@@ -1,6 +1,5 @@
 import 'package:edu_app/Controllers/LoginController.dart';
 import 'package:edu_app/UI/colors.dart';
-import 'package:edu_app/UI/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +14,19 @@ class SettingsPageRoute extends CupertinoPageRoute {
   }
 }
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   final LoginController loginController = LoginController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -31,10 +41,10 @@ class SettingsPage extends StatelessWidget {
             end: Alignment.bottomLeft,
             stops: [0.1, 0.5, 0.7, 0.9],
             colors: [
-              AppColor.colors[1].color,
-              AppColor.colors[3].color,
-              AppColor.colors[3].color,
-              AppColor.colors[3].color,
+              Colors.blue[800],
+              Colors.blue[700],
+              Colors.blue[600],
+              Colors.blue[400],
             ],
           ),
         ),
@@ -45,10 +55,7 @@ class SettingsPage extends StatelessWidget {
               RaisedButton(
                 child: Text("Logout"),
                 onPressed: () => {
-                  loginController.logout(),
-                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                    builder: (context) => new Splash(),
-                  ))
+                  loginController.logout(context),
                 },
               ),
               SizedBox(height: size.height * 0.1),

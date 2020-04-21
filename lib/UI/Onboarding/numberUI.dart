@@ -158,8 +158,6 @@ class NumberPageState extends State<NumberPage> {
   //Firebase Auth functions
   Future<void> submitPhoneNumber(numtextcontroller, context) async {
     String phoneNumber = "+94 " + numtextcontroller.text.toString().trim();
-    print(phoneNumber);
-
     var firebaseAuth = FirebaseAuth.instance;
 
     final PhoneVerificationCompleted verificationCompleted =
@@ -167,31 +165,29 @@ class NumberPageState extends State<NumberPage> {
       setState(() {
         status = 'Verification Completed !';
       });
-      print('verificationCompleted');
+      // print('verificationCompleted');
       this.phoneAuthCredential = phoneAuthCredential;
-      print(phoneAuthCredential);
 
       firebaseAuth
           .signInWithCredential(phoneAuthCredential)
           .then((AuthResult value) {
         if (value.user != null) {
-          print(value.user);
           setState(() {
             status = 'Authentication successful !';
           });
-          print('Authentication successful');
+          // print('Authentication successful');
           loginController.selectlogin(context);
         } else {
           setState(() {
             status = 'Invalid code/invalid authentication !';
           });
-          print('Invalid code/invalid authentication');
+          // print('Invalid code/invalid authentication');
         }
       }).catchError((error) {
         setState(() {
           status = 'Something has gone wrong, please try later !';
         });
-        print('Something has gone wrong, please try later');
+        // print('Something has gone wrong, please try later');
       });
     };
 
@@ -199,22 +195,21 @@ class NumberPageState extends State<NumberPage> {
       setState(() {
         status = "Verification failed !";
       });
-      print("Verification failed");
-      print(error);
+      // print("Verification failed");
+      // print(error);
     };
 
     final PhoneCodeSent codeSent = (String verificationId, [int code]) {
       setState(() {
         status = "Waiting for OTP auto retrieval ...";
       });
-      print('codeSent');
+      // print('codeSent');
     };
 
     final PhoneCodeAutoRetrievalTimeout codeAutoRetrievalTimeout =
         (String verificationId) {
-      print("verification id");
-      print(verificationId);
-      print('codeAutoRetrievalTimeout');
+      // print('codeAutoRetrievalTimeout');
+      FocusScope.of(context).requestFocus(FocusNode());
       Navigator.of(context).pushReplacement(new MaterialPageRoute(
           builder: (context) => new OTPPage(
                 actualCode: verificationId,

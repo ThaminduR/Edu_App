@@ -36,9 +36,6 @@ class QuizFinishedPageState extends State<QuizFinishedPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // int correct = widget.paper.countAnswers(widget.answers);
-    // widget.paper.saveAnswers(widget.answers, correct);
-    // widget.paper.updateScore(correct);
     final TextStyle titleStyle = TextStyle(
         color: Colors.black87, fontSize: 22.0, fontWeight: FontWeight.w500);
     final TextStyle trailingStyle = TextStyle(

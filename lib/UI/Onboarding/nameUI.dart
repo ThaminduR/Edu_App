@@ -80,8 +80,11 @@ class NamePageState extends State<NamePage> {
               height: (size.height) * 0.1,
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB((size.width) * 0.1,
-                  (size.height) * 0.1, (size.width) * 0.1, (size.height) * 0.1),
+              padding: EdgeInsets.fromLTRB(
+                  (size.width) * 0.1,
+                  (size.height) * 0.1,
+                  (size.width) * 0.1,
+                  (size.height) * 0.04),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -130,35 +133,41 @@ class NamePageState extends State<NamePage> {
                 ),
               ),
             ),
+            _isInAsyncCall ? CircularProgressIndicator() : Container(),
+            SizedBox(
+              height: size.height * 0.05,
+            ),
             FloatingActionButton.extended(
               backgroundColor: AppColor.colors[1].color,
-              onPressed: () => {
-                if (_formKey.currentState.validate())
-                  {
-                    _formKey.currentState.save(),
-                    FocusScope.of(context).requestFocus(new FocusNode()),
-                    setState(() {
-                      _isInAsyncCall = true;
-                    }),
-                    Future.delayed(Duration(milliseconds: 10), () async {
-                      bool isUnique = await loginController
-                          .usernamUnique(nametextcontroller.text);
-                      setState(() {
-                        if (isUnique) {
-                          _isInvalidAsyncUser = false;
-                          _isLoggedIn = true;
-                        } else {
-                          _isInvalidAsyncUser = true;
-                        }
-                      });
-                      _isInAsyncCall = false;
-                    }),
-                    if (_isLoggedIn)
-                      {
-                        log(),
-                      }
-                  }
-              },
+              onPressed: _isInAsyncCall
+                  ? null
+                  : () => {
+                        if (_formKey.currentState.validate())
+                          {
+                            _formKey.currentState.save(),
+                            FocusScope.of(context)
+                                .requestFocus(new FocusNode()),
+                            setState(() {
+                              _isInAsyncCall = true;
+                            }),
+                            Future.delayed(Duration(milliseconds: 500 ), () async {
+                              bool isUnique = await loginController
+                                  .usernamUnique(nametextcontroller.text);
+                              setState(() {
+                                if (isUnique) {
+                                  _isInvalidAsyncUser = false;
+                                  _isLoggedIn = true;
+                                } else {
+                                  _isInvalidAsyncUser = true;
+                                }
+                              });
+                              _isInAsyncCall = false;
+                              if (_isLoggedIn) {
+                                log();
+                              }
+                            }),
+                          }
+                      },
               label: Text("Submit"),
             )
           ],
@@ -168,6 +177,7 @@ class NamePageState extends State<NamePage> {
   }
 
   log() {
+    FocusScope.of(context).requestFocus(FocusNode());
     loginController.savelogin(nametextcontroller.text.toString());
     Navigator.of(context).pushReplacement(
         new MaterialPageRoute(builder: (context) => new HomePage()));

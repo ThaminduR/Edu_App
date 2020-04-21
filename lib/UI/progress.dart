@@ -33,19 +33,15 @@ class ProgressPage extends StatelessWidget {
         ),
         body: Container(
           decoration: BoxDecoration(
-            // image: DecorationImage(
-            //   image: AssetImage('assets/images/leaderbg.jpg'),
-            //   fit: BoxFit.fitHeight,
-            // ),
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
               stops: [0.1, 0.5, 0.7, 0.9],
               colors: [
-                AppColor.colors[1].color,
-                AppColor.colors[3].color,
-                AppColor.colors[3].color,
-                AppColor.colors[3].color,
+                Colors.blue[800],
+                Colors.blue[700],
+                Colors.blue[600],
+                Colors.blue[400],
               ],
             ),
           ),

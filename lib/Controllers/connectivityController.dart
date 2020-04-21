@@ -40,15 +40,12 @@ class ConnectivityController {
       try {
         final result = await InternetAddress.lookup('google.com');
         if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-          print("Connected");
           isConnected = true;
         }
       } on SocketException catch (_) {
-        print('Connected. No internet');
         isConnected = false;
       }
     } else {
-      print("Not connected");
       isConnected = false;
     }
     return isConnected;

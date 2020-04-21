@@ -1,5 +1,6 @@
 import 'package:edu_app/UI/Onboarding/nameUI.dart';
 import 'package:edu_app/UI/home.dart';
+import 'package:edu_app/UI/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/Datalayer/Database.dart';
@@ -14,7 +15,7 @@ class LoginController {
     String uid = user.uid;
     String number = user.phoneNumber;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('username', name);
+    await prefs.setString('username', name);
     _database.addUser(uid, name, number);
   }
 
@@ -24,6 +25,7 @@ class LoginController {
     String uid = firebaseuser.uid;
     Firebase db = Firebase.getdb();
     bool isnew = await db.checknewUser(uid);
+    FocusScope.of(context).requestFocus(FocusNode());
     if (isnew) {
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new NamePage()));
@@ -47,10 +49,14 @@ class LoginController {
     return db.checkUsername(name);
   }
 
-  Future<void> logout() async {
+  Future<void> logout(context) async {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     firebaseAuth.signOut();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('username');
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.of(context).pushReplacement(new MaterialPageRoute(
+      builder: (context) => new Splash(),
+    ));
   }
 }

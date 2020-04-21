@@ -1,4 +1,3 @@
-import 'package:edu_app/Controllers/connectivityController.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/home.dart';
 import 'package:edu_app/UI/Onboarding/onboarding.dart';
@@ -6,9 +5,6 @@ import 'package:edu_app/UI/Paper UI/quizLoadScreen.dart';
 import 'package:edu_app/UI/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-
-// import 'Datalayer/models/connectivity.dart';
 
 void main() {
   // to prevent screen orientation changes. locked to protrait mode

@@ -24,12 +24,7 @@ class SplashState extends State<Splash> {
 
     this.isConnected = await connectivityController.checkConnection();
     bool _seen = (prefs.getBool('seen') ?? false);
-    bool islogged1 = await loginController.isLogged();
-    bool islogged = false;
-    if (prefs.containsKey('username') && islogged1) {
-      islogged = true;
-    }
-
+    bool islogged = await loginController.isLogged();
     if (_seen) {
       if (this.isConnected) {
         if (!islogged) {
