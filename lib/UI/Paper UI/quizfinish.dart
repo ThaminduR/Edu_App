@@ -36,9 +36,6 @@ class QuizFinishedPageState extends State<QuizFinishedPage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    // int correct = widget.paper.countAnswers(widget.answers);
-    // widget.paper.saveAnswers(widget.answers, correct);
-    // widget.paper.updateScore(correct);
     final TextStyle titleStyle = TextStyle(
         color: Colors.black87, fontSize: 22.0, fontWeight: FontWeight.w500);
     final TextStyle trailingStyle = TextStyle(
@@ -58,12 +55,11 @@ class QuizFinishedPageState extends State<QuizFinishedPage> {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              Colors.blue[800],
-              Colors.blue[700],
-              Colors.blue[600],
-              Colors.blue[400],
+              Colors.teal[800],
+              Colors.teal[700],
+              Colors.teal[600],
             ],
           ),
         ),

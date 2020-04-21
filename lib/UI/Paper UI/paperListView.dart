@@ -31,12 +31,11 @@ class PaperPage extends StatelessWidget {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              AppColor.colors[1].color,
-              AppColor.colors[3].color,
-              AppColor.colors[3].color,
-              AppColor.colors[3].color,
+              Colors.cyanAccent[700],
+              Colors.cyanAccent[400],
+              Colors.cyanAccent,
             ],
           ),
         ),
@@ -46,7 +45,10 @@ class PaperPage extends StatelessWidget {
           builder: (context, paperSnap) {
             switch (paperSnap.connectionState) {
               case ConnectionState.none: //if there's no papers in database
-                return Text('No Papers to show');
+                return Text(
+                  'No Papers to show',
+                  style: TextStyle(color: Colors.teal[800]),
+                );
               case ConnectionState.active:
               case ConnectionState.waiting: //show while papers are loading
                 return Padding(
@@ -67,7 +69,10 @@ class PaperPage extends StatelessWidget {
                       ),
                       color: Colors.white,
                     ),
-                    child: Text('Loading Papers'),
+                    child: Text(
+                      'Loading Papers',
+                      style: TextStyle(color: Colors.teal[800]),
+                    ),
                   ),
                 );
               case ConnectionState.done:
@@ -78,7 +83,7 @@ class PaperPage extends StatelessWidget {
                       child: Text(
                     "You don't have any downloaded papers",
                     style: TextStyle(
-                        color: Colors.white, fontSize: size.height * 0.02),
+                        color: Colors.teal[800], fontSize: size.height * 0.02),
                   ));
                 } else {
                   return ListView.builder(
@@ -109,7 +114,7 @@ Widget buildPapers(context, size, paper) {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         border: Border.all(
-          color: AppColor.colors[1].color,
+          color: AppColor.colors[6].color,
           //color: Color.fromRGBO(36, 209, 99, 0.9),
         ),
         color: Colors.white,
@@ -118,7 +123,7 @@ Widget buildPapers(context, size, paper) {
         title: Text(
           'Question Paper ${paper.number}', // paper id here
           style: TextStyle(
-            color: AppColor.colors[1].color,
+            color: AppColor.colors[6].color,
             fontSize: size.height * 0.02,
           ),
         ),
@@ -126,7 +131,7 @@ Widget buildPapers(context, size, paper) {
           Text(
             'Time : ${paper.hTime}h ${paper.mTime}m',
             style: TextStyle(
-              color: AppColor.colors[1].color,
+              color: AppColor.colors[6].color,
             ),
           ),
           Padding(
@@ -135,14 +140,14 @@ Widget buildPapers(context, size, paper) {
             child: Container(
               decoration: BoxDecoration(
                   border: Border.all(
-                color: AppColor.colors[1].color,
+                color: AppColor.colors[6].color,
               )),
               child: FlatButton(
                 color: Colors.white,
                 child: Text(
                   'Do the paper',
                   style: TextStyle(
-                    color: AppColor.colors[1].color,
+                    color: AppColor.colors[6].color,
                   ),
                 ),
                 onPressed: () async {
