@@ -1,8 +1,10 @@
 import 'package:edu_app/UI/Onboarding/nameUI.dart';
 import 'package:edu_app/UI/home.dart';
+import 'package:edu_app/UI/splash.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/Datalayer/Database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController {
   Firebase _database = Firebase.getdb();
@@ -12,7 +14,8 @@ class LoginController {
     FirebaseUser user = await firebaseAuth.currentUser();
     String uid = user.uid;
     String number = user.phoneNumber;
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('username', name);
     _database.addUser(uid, name, number);
   }
 
@@ -22,6 +25,7 @@ class LoginController {
     String uid = firebaseuser.uid;
     Firebase db = Firebase.getdb();
     bool isnew = await db.checknewUser(uid);
+    FocusScope.of(context).requestFocus(FocusNode());
     if (isnew) {
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new NamePage()));
@@ -40,8 +44,19 @@ class LoginController {
     return false;
   }
 
-  Future<void> logout() async {
+  Future<bool> usernamUnique(name) async {
+    Firebase db = Firebase.getdb();
+    return db.checkUsername(name);
+  }
+
+  Future<void> logout(context) async {
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     firebaseAuth.signOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('username');
+    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.of(context).pushReplacement(new MaterialPageRoute(
+      builder: (context) => new Splash(),
+    ));
   }
 }

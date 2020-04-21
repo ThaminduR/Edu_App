@@ -1,5 +1,3 @@
-import 'package:edu_app/Datalayer/Database.dart';
-
 class User {
   String name;
   String number;

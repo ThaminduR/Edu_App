@@ -217,4 +217,17 @@ class Firebase {
     });
     return list;
   }
+
+  Future<bool> checkUsername(name) async {
+    var documents = firebaseReference.collection('users').getDocuments();
+    bool isUnique = true;
+    await documents.then((snapshot) {
+      snapshot.documents.forEach((f) {
+        if (f.data['name'] == name.trim()) {
+          isUnique = false;
+        }
+      });
+    });
+    return isUnique;
+  }
 }

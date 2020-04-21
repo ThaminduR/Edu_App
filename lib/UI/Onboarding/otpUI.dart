@@ -3,10 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/Controllers/LoginController.dart';
 
-import '../home.dart';
-
 class OTPPage extends StatefulWidget {
-  String actualCode;
+  final String actualCode;
   OTPPage({
     Key key,
     @required this.actualCode,
@@ -35,12 +33,11 @@ class OTPPageState extends State<OTPPage> {
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              Colors.blue[800],
-              Colors.blue[700],
-              Colors.blue[600],
-              Colors.blue[400],
+              Colors.cyanAccent[700],
+              Colors.cyanAccent[400],
+              Colors.cyanAccent,
             ],
           ),
         ),
@@ -52,7 +49,7 @@ class OTPPageState extends State<OTPPage> {
                   color: Colors.black38,
                   offset: new Offset(2.0, 2.0),
                 )
-              ], color: AppColor.colors[1].color),
+              ], color: AppColor.colors[6].color),
               child: Column(
                 children: <Widget>[
                   Container(
@@ -95,7 +92,7 @@ class OTPPageState extends State<OTPPage> {
                       child: Text(
                         "Auto retrieval failed. Enter the 6 digit OTP you received.",
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Colors.teal[800],
                           fontSize: size.height * 0.02,
                         ),
                         textAlign: TextAlign.center,
@@ -135,7 +132,7 @@ class OTPPageState extends State<OTPPage> {
               ),
             ),
             FloatingActionButton.extended(
-              backgroundColor: AppColor.colors[1].color,
+              backgroundColor: AppColor.colors[6].color,
               onPressed: () => {
                 if (_formKey.currentState.validate())
                   {signInWithPhoneNumber(otptextcontroller.text.toString())},
@@ -152,7 +149,7 @@ class OTPPageState extends State<OTPPage> {
     print(smsCode);
     print("verification id in otp page");
     print(widget.actualCode);
-    AuthCredential phoneAuthCredential = await PhoneAuthProvider.getCredential(
+    AuthCredential phoneAuthCredential = PhoneAuthProvider.getCredential(
         verificationId: widget.actualCode, smsCode: smsCode);
     FirebaseAuth.instance
         .signInWithCredential(phoneAuthCredential)

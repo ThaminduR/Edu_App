@@ -38,7 +38,7 @@ class PaperScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                      color: AppColor.colors[1].color,
+                      color: AppColor.colors[6].color,
                       //color: Color.fromRGBO(36, 209, 99, 0.9),
                     ),
                     color: Colors.white,

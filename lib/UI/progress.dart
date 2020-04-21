@@ -1,3 +1,4 @@
+import 'package:edu_app/Controllers/connectivityController.dart';
 import 'package:edu_app/Controllers/progressController.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,6 +18,8 @@ class ProgressPageRoute extends CupertinoPageRoute {
 
 class ProgressPage extends StatelessWidget {
   final ProgressController progressController = ProgressController();
+  final ConnectivityController connectivityController =
+      ConnectivityController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -30,19 +33,14 @@ class ProgressPage extends StatelessWidget {
         ),
         body: Container(
           decoration: BoxDecoration(
-            // image: DecorationImage(
-            //   image: AssetImage('assets/images/leaderbg.jpg'),
-            //   fit: BoxFit.fitHeight,
-            // ),
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              stops: [0.1, 0.5, 0.7, 0.9],
+              stops: [0.1, 0.4, 0.9],
               colors: [
-                AppColor.colors[1].color,
-                AppColor.colors[3].color,
-                AppColor.colors[3].color,
-                AppColor.colors[3].color,
+                Colors.cyanAccent[700],
+                Colors.cyanAccent[400],
+                Colors.cyanAccent,
               ],
             ),
           ),
@@ -51,7 +49,10 @@ class ProgressPage extends StatelessWidget {
               builder: (context, papersnapshot) {
                 switch (papersnapshot.connectionState) {
                   case ConnectionState.none: //if there's no papers in database
-                    return Text('No Papers to show');
+                    return Text(
+                      'No Connection !',
+                      style: TextStyle(color: Colors.teal[800]),
+                    );
                   case ConnectionState.active:
                   case ConnectionState.waiting: //show while papers are loading
                     return Padding(
@@ -72,18 +73,25 @@ class ProgressPage extends StatelessWidget {
                           ),
                           color: Colors.white,
                         ),
-                        child: Text('Loading Papers'),
+                        child: Text(
+                          'Loading Papers',
+                          style: TextStyle(color: Colors.teal[800]),
+                        ),
                       ),
                     );
                   case ConnectionState.done:
                     if (papersnapshot.hasError)
-                      return Text('Error: ${papersnapshot.error}');
+                      return Text(
+                        'Error: ${papersnapshot.error}',
+                        style: TextStyle(color: Colors.teal[800]),
+                      );
                     if (papersnapshot.data.length == 0) {
                       return Center(
                           child: Text(
                         "You haven't done any papers",
                         style: TextStyle(
-                            color: Colors.white, fontSize: size.height * 0.02),
+                            color: Colors.teal[800],
+                            fontSize: size.height * 0.02),
                       ));
                     } else {
                       return buildProgress(papersnapshot.data, size);
@@ -114,7 +122,7 @@ class ProgressPage extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: AppColor.colors[0].color,
+          color: Colors.teal[900],
         ),
         child: ExpansionTile(
           title: Text(

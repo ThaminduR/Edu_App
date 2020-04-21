@@ -6,6 +6,7 @@ import 'package:edu_app/UI/Paper UI/paperListView.dart';
 import 'package:edu_app/UI/progress.dart';
 import 'package:edu_app/UI/lessons.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //Uncomment text fields to display Sinhala text
 //Uncomment decoration image to display children
@@ -16,37 +17,83 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
+  String username = 'User';
+
+  @override
+  void initState() {
+    super.initState();
+    // username = await getUsername();
+
+    Navigator.of(context).popUntil((route) => route.isFirst);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; //get current device screen size
-    double rowSpace = size.height * 0.07;
+    double rowSpace = size.height * 0.02;
     double colSpace = size.width * 0.06;
-    Color tileColor = AppColor.colors[0].color;
+    Color tileColor = AppColor.colors[6].color;
+    // Colors.teal[800];
+    //
     return Scaffold(
         appBar: AppBar(
-          title: Text('Quiz App'),
+          title: Text('Grade 5'),
+          // centerTitle: true,
         ),
         body: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColor.colors[5].color,
-            // image: DecorationImage(
-            //     alignment: Alignment.bottomCenter,
-            //     image: AssetImage(
-            //         'assets/images/boygirl.png'), //image at the bottom of home page
-            //     fit: BoxFit.fitWidth),
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              stops: [0.1, 0.4, 0.9],
+              colors: [
+                Colors.cyanAccent[700],
+                Colors.cyanAccent[400],
+                Colors.cyanAccent,
+              ],
+            ),
+            image: DecorationImage(
+                alignment: Alignment.bottomCenter,
+                image: AssetImage(
+                    'assets/images/boygirl.png'), //image at the bottom of home page
+                fit: BoxFit.fitWidth),
           ),
           child: Container(
             padding: EdgeInsets.fromLTRB(
               size.width * 0.02,
               size.height * 0.02,
               size.width * 0.02,
-              size.height * 0.05,
+              size.height * 0.04,
             ),
             child: Column(
               children: <Widget>[
+                // Text(
+                //   "Welcome " + username,
+                //   style: TextStyle(
+                //       color: Colors.white,
+                //       fontSize: size.height * 0.025,
+                //       shadows: [
+                //         Shadow(
+                //             // bottomLeft
+                //             offset: Offset(-.5, -.5),
+                //             color: Colors.teal[900]),
+                //         Shadow(
+                //             // bottomRight
+                //             offset: Offset(.5, -.5),
+                //             color: Colors.teal[900]),
+                //         Shadow(
+                //             // topRight
+                //             offset: Offset(.5, .5),
+                //             color: Colors.teal[900]),
+                //         Shadow(
+                //             // topLeft
+                //             offset: Offset(-.5, .5),
+                //             color: Colors.teal[900]),
+                //       ]),
+                // ),
                 SizedBox(
-                  height: rowSpace,
+                  height: rowSpace * 0.5,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -337,5 +384,12 @@ class HomePageState extends State<HomePage> {
             ),
           ),
         ));
+  }
+
+  Future<String> getUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String _username = prefs.getString('username');
+    print(_username);
+    return _username;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:edu_app/Controllers/LoginController.dart';
 import 'package:edu_app/UI/colors.dart';
-import 'package:edu_app/UI/splash.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,26 +14,36 @@ class SettingsPageRoute extends CupertinoPageRoute {
   }
 }
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
+  @override
+  _SettingsPageState createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
   final LoginController loginController = LoginController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text('About Us'),
+        title: Text('Settings'),
       ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
-            stops: [0.1, 0.5, 0.7, 0.9],
+            stops: [0.1, 0.4, 0.9],
             colors: [
-              AppColor.colors[1].color,
-              AppColor.colors[3].color,
-              AppColor.colors[3].color,
-              AppColor.colors[3].color,
+              Colors.cyanAccent[700],
+              Colors.cyanAccent[400],
+              Colors.cyanAccent,
             ],
           ),
         ),
@@ -43,12 +52,13 @@ class SettingsPage extends StatelessWidget {
             children: [
               SizedBox(height: size.height * 0.1),
               RaisedButton(
-                child: Text("Logout"),
+                color: Colors.teal[900],
+                child: Text(
+                  "Logout",
+                  style: TextStyle(color: Colors.white),
+                ),
                 onPressed: () => {
-                  loginController.logout(),
-                  Navigator.of(context).pushReplacement(new MaterialPageRoute(
-                    builder: (context) => new Splash(),
-                  ))
+                  loginController.logout(context),
                 },
               ),
               SizedBox(height: size.height * 0.1),
@@ -56,7 +66,7 @@ class SettingsPage extends StatelessWidget {
                 child: Text(
                   "We are TechLabs",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.teal[800],
                     fontSize: size.height * 0.03,
                   ),
                 ),

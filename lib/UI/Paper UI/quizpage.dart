@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 import 'package:edu_app/Datalayer/paper.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/Paper UI/quizfinish.dart';
@@ -30,8 +28,8 @@ class _QuizPageState extends State<QuizPage>
     controller = AnimationController(
       vsync: this,
       duration:
-          //Duration(hours: widget.paper.htime, minutes: widget.paper.mtime),
-          Duration(seconds: 10),
+          Duration(hours: widget.paper.htime, minutes: widget.paper.mtime),
+      // Duration(seconds: 10),
     );
     starttimer();
     controller.reverse(from: 1.0);
@@ -67,12 +65,11 @@ class _QuizPageState extends State<QuizPage>
             gradient: LinearGradient(
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
-              stops: [0.1, 0.5, 0.7, 0.9],
+              stops: [0.1, 0.4, 0.9],
               colors: [
-                Colors.blue[800],
-                Colors.blue[700],
-                Colors.blue[600],
-                Colors.blue[400],
+                Colors.teal[800],
+                Colors.teal[700],
+                Colors.teal[600],
               ],
             ),
           ),
@@ -98,14 +95,14 @@ class _QuizPageState extends State<QuizPage>
                           Text(
                             "Time Remaining : ",
                             style: TextStyle(
-                              color: AppColor.colors[1].color,
+                              color: AppColor.colors[6].color,
                               fontSize: size.height * 0.03,
                             ),
                           ),
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(25.0),
-                              color: AppColor.colors[3].color,
+                              color: Colors.teal[700],
                             ),
                             alignment: Alignment.center,
                             height: size.height * 0.05,
@@ -150,12 +147,12 @@ class _QuizPageState extends State<QuizPage>
                             icon: _currentIndex == (0)
                                 ? Icon(null)
                                 : Icon(Icons.arrow_back_ios),
-                            color: AppColor.colors[1].color,
+                            color: AppColor.colors[6].color,
                             onPressed: _previous,
                           ),
                           SizedBox(width: size.width * 0.035),
                           CircleAvatar(
-                            backgroundColor: AppColor.colors[1].color,
+                            backgroundColor: AppColor.colors[6].color,
                             child: Text(
                               "${_currentIndex + 1}",
                               style: TextStyle(color: Colors.white),
@@ -166,7 +163,7 @@ class _QuizPageState extends State<QuizPage>
                             icon: _currentIndex == (widget.paper.qs.length - 1)
                                 ? Icon(null)
                                 : Icon(Icons.arrow_forward_ios),
-                            color: AppColor.colors[1].color,
+                            color: AppColor.colors[6].color,
                             onPressed: _next,
                           ),
                         ],
@@ -236,7 +233,7 @@ class _QuizPageState extends State<QuizPage>
                     Container(
                       child: _currentIndex == (widget.paper.qs.length - 1)
                           ? RaisedButton(
-                              color: AppColor.colors[1].color,
+                              color: Colors.teal[900],
                               child: Text(
                                 "Submit",
                                 style: TextStyle(
@@ -263,8 +260,8 @@ class _QuizPageState extends State<QuizPage>
   }
 
   void starttimer() {
-    timer = 10;
-    //timer = (widget.paper.htime * 60 * 60) + (widget.paper.mtime * 60);
+    // timer = 10;
+    timer = (widget.paper.htime * 60 * 60) + (widget.paper.mtime * 60);
     const onesec = Duration(seconds: 1);
     Timer.periodic(onesec, (Timer t) {
       if (timer < 2) {
