@@ -73,11 +73,6 @@ class SplashState extends State<Splash> {
               Colors.teal,
             ],
           ),
-          // image: DecorationImage(
-              
-          //     image: AssetImage(
-          //         'assets/images/boygirl2.png'), //image at the bottom of home page
-          //     fit: BoxFit.fitWidth),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
