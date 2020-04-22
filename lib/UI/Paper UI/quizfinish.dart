@@ -1,4 +1,7 @@
+import 'package:edu_app/Controllers/connectivityController.dart';
+import 'package:edu_app/Controllers/resultController.dart';
 import 'package:edu_app/Datalayer/paper.dart';
+import 'package:edu_app/Datalayer/paperMarks.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/UI/Paper UI/reviewanswers.dart';
 import 'package:flutter/material.dart';
@@ -22,15 +25,13 @@ class QuizFinishedPageState extends State<QuizFinishedPage> {
   int correct;
   List<Question> questions;
   Map<int, dynamic> answers;
+  ConnectivityController _connectivityController = ConnectivityController();
+  ResultController _resultController = ResultController();
 
   @override
   void initState() {
     super.initState();
-    this.questions = widget.questions;
-    this.answers = widget.answers;
-    correct = widget.paper.countAnswers(widget.answers);
-    widget.paper.saveAnswers(widget.answers, correct);
-    widget.paper.updateScore(correct);
+    handleAnswers();
   }
 
   @override
@@ -147,5 +148,40 @@ class QuizFinishedPageState extends State<QuizFinishedPage> {
         ),
       ),
     );
+  }
+
+  void handleAnswers() async {
+    
+    this.questions = widget.questions;
+    this.answers = widget.answers;
+    correct = widget.paper.countAnswers(widget.answers);
+    bool isConnected = await _connectivityController.checkConnection();
+    List<GivenAnswer> givenanswers = [];
+    this.answers.forEach((q, a) {
+      GivenAnswer ans = GivenAnswer(qId: q, ans: a);
+      givenanswers.add(ans);
+    });
+
+    if (isConnected) {
+      print("connected");
+      await widget.paper.saveAnswers(widget.answers, correct);
+      await widget.paper.updateScore(correct);
+      DBMarks result = new DBMarks(
+          paperid: widget.paper.id,
+          ans: givenanswers,
+          marks: correct,
+          upload: 1);
+      await _resultController.upload(result);
+      print("done");
+    } else {
+      print("no connection");
+      print(widget.answers);
+      DBMarks result = new DBMarks(
+          paperid: widget.paper.id,
+          ans: givenanswers,
+          marks: correct,
+          upload: 0);
+      await _resultController.upload(result);
+    }
   }
 }

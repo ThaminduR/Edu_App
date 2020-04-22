@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:edu_app/Datalayer/paperMarks.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -32,6 +33,13 @@ class DBProvider {
           "mTime INT"
           ")");
 
+      await db.execute("CREATE TABLE Result ("
+          "paperid INT PRIMARY KEY,"
+          "ans TEXT,"
+          "marks INT,"
+          "upload INT"
+          ")");
+
       await db.execute("CREATE TABLE downloadedPaper ("
           "id TEXT PRIMARY KEY,"
           "url TEXT,"
@@ -41,6 +49,44 @@ class DBProvider {
           "mTime INT"
           ")");
     });
+  }
+
+  Future<void> addResult(DBMarks marks) async {
+    var dbClient = await db;
+    marks.paperid =
+        (await dbClient.insert('Result', marks.toJson())).toString();
+  }
+
+  Future<List<DBMarks>> getResults() async {
+    var dbClient = await db;
+    List<Map> maps = await dbClient.query('Result', columns: [
+      "paperid",
+      "ans",
+      "marks",
+      "upload",
+    ]);
+    List<DBMarks> results = [];
+    if (maps.length > 0) {
+      for (int i = 0; i < maps.length; i++) {
+        results.add(DBMarks.fromJson(maps[i]));
+      }
+    }
+    return results;
+  }
+
+  Future<void> updateResult(DBMarks marks) async {
+    var dbClient = await db;
+    marks.paperid = dbClient.update('Result', marks.toJson()).toString();
+  }
+
+  Future<bool> checkResult(paperid) async {
+    var dbClient = await db;
+    var result =
+        await dbClient.query('Paper', where: "id = ?", whereArgs: [paperid]);
+    if (result.isNotEmpty) {
+      return true;
+    }
+    return false;
   }
 
   //to add paper metadata to local db

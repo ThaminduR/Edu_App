@@ -16,6 +16,7 @@ class Splash extends StatefulWidget {
 class SplashState extends State<Splash> {
   bool isConnected = false;
   bool tryAgain = false;
+  bool _first = true;
   ConnectivityController connectivityController = ConnectivityController();
 
   Future<void> checkFirstSeen() async {
@@ -25,6 +26,7 @@ class SplashState extends State<Splash> {
     this.isConnected = await connectivityController.checkConnection();
     bool _seen = (prefs.getBool('seen') ?? false);
     bool islogged = await loginController.isLogged();
+
     if (_seen) {
       if (this.isConnected) {
         if (!islogged) {
@@ -109,17 +111,23 @@ class SplashState extends State<Splash> {
 
   void checkInternet() async {
     this.isConnected = await connectivityController.checkConnection();
-    if (!this.isConnected) {
+    print(isConnected);
+    if (!this.isConnected && _first) {
+      _first = false;
       showAlert(context, context.size);
-    } else {
+    }
+    if (isConnected) {
+      Navigator.of(context).pop();
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new Splash()));
     }
-    if (tryAgain != !this.isConnected) {
-      setState(() => tryAgain = !this.isConnected);
-    } else {
-      Navigator.pop(context);
-    }
+    // if (tryAgain != !this.isConnected) {
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       setState(() => tryAgain = !this.isConnected);
+    //     });
+    //   } else {
+    //   Navigator.pop(context);
+    // }
   }
 
   void showAlert(BuildContext context, size) {
