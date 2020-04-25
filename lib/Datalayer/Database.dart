@@ -150,7 +150,6 @@ class Firebase {
         .document(paper.id)
         .setData({
       "paper_name": 'Paper ${paper.id}',
-      "paper_URL": paper.url,
       "answers": data,
       "correct_answers": correct,
     });
@@ -170,7 +169,6 @@ class Firebase {
               .updateData({'score': marks});
         } else {
           int marks = correct;
-          print(marks);
           await firebaseReference
               .collection("leaderboard")
               .document(user)

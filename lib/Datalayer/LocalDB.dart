@@ -34,7 +34,7 @@ class DBProvider {
           ")");
 
       await db.execute("CREATE TABLE Result ("
-          "paperid INT PRIMARY KEY,"
+          "paperid TEXT PRIMARY KEY,"
           "ans TEXT,"
           "marks INT,"
           "upload INT"
@@ -53,8 +53,7 @@ class DBProvider {
 
   Future<void> addResult(DBMarks marks) async {
     var dbClient = await db;
-    marks.paperid =
-        (await dbClient.insert('Result', marks.toJson())).toString();
+    marks.id = (await dbClient.insert('Result', marks.toJson())).toString();
   }
 
   Future<List<DBMarks>> getResults() async {
@@ -76,13 +75,15 @@ class DBProvider {
 
   Future<void> updateResult(DBMarks marks) async {
     var dbClient = await db;
-    marks.paperid = dbClient.update('Result', marks.toJson()).toString();
+    marks.id = (await dbClient.update('Result', marks.toJson(),
+            where: 'paperid = ?', whereArgs: [marks.id]))
+        .toString();
   }
 
   Future<bool> checkResult(paperid) async {
     var dbClient = await db;
-    var result =
-        await dbClient.query('Paper', where: "id = ?", whereArgs: [paperid]);
+    var result = await dbClient
+        .query('Result', where: "paperid = ?", whereArgs: [paperid]);
     if (result.isNotEmpty) {
       return true;
     }

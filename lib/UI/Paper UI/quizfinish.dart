@@ -151,7 +151,6 @@ class QuizFinishedPageState extends State<QuizFinishedPage> {
   }
 
   void handleAnswers() async {
-    
     this.questions = widget.questions;
     this.answers = widget.answers;
     correct = widget.paper.countAnswers(widget.answers);
@@ -163,24 +162,15 @@ class QuizFinishedPageState extends State<QuizFinishedPage> {
     });
 
     if (isConnected) {
-      print("connected");
       await widget.paper.saveAnswers(widget.answers, correct);
       await widget.paper.updateScore(correct);
       DBMarks result = new DBMarks(
-          paperid: widget.paper.id,
-          ans: givenanswers,
-          marks: correct,
-          upload: 1);
+          id: widget.paper.id, ans: givenanswers, marks: correct, upload: 1);
       await _resultController.upload(result);
-      print("done");
     } else {
-      print("no connection");
       print(widget.answers);
       DBMarks result = new DBMarks(
-          paperid: widget.paper.id,
-          ans: givenanswers,
-          marks: correct,
-          upload: 0);
+          id: widget.paper.id, ans: givenanswers, marks: correct, upload: 0);
       await _resultController.upload(result);
     }
   }

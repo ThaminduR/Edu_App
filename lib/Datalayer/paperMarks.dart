@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:edu_app/Datalayer/paper.dart';
+import 'package:edu_app/Datalayer/Database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class PaperMarks {
   String paperid;
@@ -13,24 +14,24 @@ class PaperMarks {
 }
 
 class DBMarks {
-  String paperid;
+  String id;
   int marks;
   List<GivenAnswer> ans;
   int upload;
 
   DBMarks({
-    this.paperid,
+    this.id,
     this.ans,
     this.marks,
     this.upload,
   });
 
   factory DBMarks.fromJson(Map<String, dynamic> json) {
-    var asFromJson = json['ans'] as List;
+    List asFromJson = jsonDecode(json['ans']);
     List<GivenAnswer> ansList =
         asFromJson.map((i) => GivenAnswer.fromJson(i)).toList();
     return DBMarks(
-      paperid: json["paperid"],
+      id: json["paperid"],
       ans: ansList,
       marks: json["marks"],
       upload: json["upload"],
@@ -38,11 +39,37 @@ class DBMarks {
   }
 
   Map<String, dynamic> toJson() => {
-        "paperid": paperid,
+        "paperid": id,
         "ans": jsonEncode(ans),
         "marks": marks,
         "upload": upload,
       };
+
+  Future<void> saveAnswers() async {
+    Firebase db = Firebase.getdb();
+    Map<int, dynamic> answers = {};
+    ans.forEach((answer) => {answers[answer.qId] = answer.ans});
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseuser = await firebaseAuth.currentUser();
+    var user = firebaseuser.uid;
+    db.uploadAnswers(user, this, answers, this.marks);
+  }
+
+  Future<void> updateScore() async {
+    Firebase db = Firebase.getdb();
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseuser = await firebaseAuth.currentUser();
+    String user = firebaseuser.phoneNumber;
+    String uid = firebaseuser.uid;
+    bool firsttime = await db.firstTime(uid, this.id);
+    if (firsttime) {
+      db.updateLeaderboard(user, this.marks);
+    }
+  }
+
+  void setUpload(up) {
+    this.upload = up;
+  }
 }
 
 class GivenAnswer {
