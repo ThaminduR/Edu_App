@@ -150,7 +150,6 @@ class Firebase {
         .document(paper.id)
         .setData({
       "paper_name": 'Paper ${paper.id}',
-      "paper_URL": paper.url,
       "answers": data,
       "correct_answers": correct,
     });
@@ -170,7 +169,6 @@ class Firebase {
               .updateData({'score': marks});
         } else {
           int marks = correct;
-          print(marks);
           await firebaseReference
               .collection("leaderboard")
               .document(user)
@@ -211,6 +209,28 @@ class Firebase {
         PaperMarks paper = PaperMarks(
           f.data['correct_answers'],
           f.documentID,
+        );
+        list.add(paper);
+      });
+    });
+    return list;
+  }
+
+//this function doesn't retrieve given answers
+  Future<List<DBMarks>> getResult(user) async {
+    List list = new List<DBMarks>();
+    await firebaseReference
+        .collection('users')
+        .document(user)
+        .collection('Papers')
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        DBMarks paper = DBMarks(
+          id: f.documentID,
+          marks: f.data['correct_answers'],
+          ans: null,
+          upload: 1,
         );
         list.add(paper);
       });

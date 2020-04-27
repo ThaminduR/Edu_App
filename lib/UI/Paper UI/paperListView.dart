@@ -1,3 +1,4 @@
+import 'package:edu_app/Controllers/connectivityController.dart';
 import 'package:edu_app/UI/colors.dart';
 import 'package:edu_app/Controllers/paperController.dart';
 import 'package:edu_app/UI/Paper UI/quizLoadScreen.dart';
@@ -17,8 +18,17 @@ class PaperPageRoute extends CupertinoPageRoute {
   }
 }
 
-class PaperPage extends StatelessWidget {
+class PaperPage extends StatefulWidget {
+  @override
+  _PaperPageState createState() => _PaperPageState();
+}
+
+class _PaperPageState extends State<PaperPage> {
   final PaperController paperController = new PaperController();
+  bool isConnected;
+  final ConnectivityController connectivityController =
+      ConnectivityController();
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size; //Get current device size
@@ -104,87 +114,147 @@ class PaperPage extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget buildPapers(context, size, paper) {
-  return Padding(
-    padding: EdgeInsets.fromLTRB(size.width * 0.08, size.height * 0.02,
-        size.width * 0.08, size.height * 0.02),
-    child: Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: AppColor.colors[6].color,
-          //color: Color.fromRGBO(36, 209, 99, 0.9),
-        ),
-        color: Colors.white,
-      ),
-      child: ExpansionTile(
-        title: Text(
-          'Question Paper ${paper.number}', // paper id here
-          style: TextStyle(
+  Widget buildPapers(context, size, paper) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(size.width * 0.08, size.height * 0.02,
+          size.width * 0.08, size.height * 0.02),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
             color: AppColor.colors[6].color,
-            fontSize: size.height * 0.02,
+            //color: Color.fromRGBO(36, 209, 99, 0.9),
           ),
+          color: Colors.white,
         ),
-        children: [
-          Text(
-            'Time : ${paper.hTime}h ${paper.mTime}m',
+        child: ExpansionTile(
+          title: Text(
+            'Question Paper ${paper.number}', // paper id here
             style: TextStyle(
               color: AppColor.colors[6].color,
+              fontSize: size.height * 0.02,
             ),
           ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-                0.0, size.height * 0.02, 0.0, size.height * 0.02),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(
+          children: [
+            Text(
+              'Time : ${paper.hTime}h ${paper.mTime}m',
+              style: TextStyle(
                 color: AppColor.colors[6].color,
-              )),
-              child: FlatButton(
-                color: Colors.white,
-                child: Text(
-                  'Do the paper',
-                  style: TextStyle(
-                    color: AppColor.colors[6].color,
-                  ),
-                ),
-                onPressed: () async {
-                  return showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25.0),
-                        ),
-                        content: Text("Are you ready ?"),
-                        actions: <Widget>[
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                  context, PaperScreen.routeName,
-                                  arguments: paper);
-                            },
-                            child: Text("Yes"),
-                          ),
-                          FlatButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text("No"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
               ),
             ),
-          ),
-        ],
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                  0.0, size.height * 0.02, 0.0, size.height * 0.02),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(
+                  color: AppColor.colors[6].color,
+                )),
+                child: FlatButton(
+                  color: Colors.white,
+                  child: Text(
+                    'Do the paper',
+                    style: TextStyle(
+                      color: AppColor.colors[6].color,
+                    ),
+                  ),
+                  onPressed: () async {
+                    await checkCon();
+                    if (isConnected) {
+                      return showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            content: Text("Are you ready ?"),
+                            actions: <Widget>[
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.pushReplacementNamed(
+                                      context, PaperScreen.routeName,
+                                      arguments: paper);
+                                },
+                                child: Text("Yes"),
+                              ),
+                              FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text("No"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      showAlert(context, size);
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
+
+  checkCon() async {
+    this.isConnected = await connectivityController.checkConnection();
+  }
+
+  void tryAgain() async {
+    this.isConnected = await connectivityController.checkConnection();
+    if (isConnected) {
+      Navigator.of(context).pop();
+    }
+    setState(() {});
+  }
+
+  void showAlert(BuildContext context, size) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "Connection Failed !",
+          textAlign: TextAlign.center,
+        ),
+        content: Container(
+          height: size.height * 0.2,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Please check your internet connection !",
+                textAlign: TextAlign.center,
+              ),
+              RaisedButton(
+                  color: Colors.teal[800],
+                  child: Text(
+                    "Try Again !",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    tryAgain();
+                  }),
+              RaisedButton(
+                  color: Colors.teal[800],
+                  child: Text(
+                    "Okay",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  })
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

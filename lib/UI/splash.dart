@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:edu_app/Controllers/LoginController.dart';
 import 'package:edu_app/Controllers/connectivityController.dart';
+import 'package:edu_app/Controllers/resultController.dart';
 import 'package:edu_app/UI/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/UI/Onboarding/onboarding.dart';
@@ -16,21 +18,25 @@ class Splash extends StatefulWidget {
 class SplashState extends State<Splash> {
   bool isConnected = false;
   bool tryAgain = false;
+  bool _first = true;
   ConnectivityController connectivityController = ConnectivityController();
 
   Future<void> checkFirstSeen() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     LoginController loginController = LoginController();
-
+    PaperController paperController = new PaperController();
+    ResultController resultController = new ResultController();
     this.isConnected = await connectivityController.checkConnection();
     bool _seen = (prefs.getBool('seen') ?? false);
     bool islogged = await loginController.isLogged();
     if (_seen) {
       if (this.isConnected) {
+        paperController.savetoDB();
         if (!islogged) {
           Navigator.of(context).pushReplacement(
               new MaterialPageRoute(builder: (context) => new NumberPage()));
         } else {
+          await resultController.checkuploaded();
           Navigator.of(context).pushReplacement(
               new MaterialPageRoute(builder: (context) => new HomePage()));
         }
@@ -47,9 +53,7 @@ class SplashState extends State<Splash> {
   @override
   void initState() {
     super.initState();
-    PaperController paperController = new PaperController();
-    paperController.savetoDB();
-    new Timer(new Duration(milliseconds: 1000), () {
+    new Timer(new Duration(milliseconds: 1500), () {
       checkFirstSeen();
     });
   }
@@ -73,11 +77,6 @@ class SplashState extends State<Splash> {
               Colors.teal,
             ],
           ),
-          // image: DecorationImage(
-              
-          //     image: AssetImage(
-          //         'assets/images/boygirl2.png'), //image at the bottom of home page
-          //     fit: BoxFit.fitWidth),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -114,17 +113,22 @@ class SplashState extends State<Splash> {
 
   void checkInternet() async {
     this.isConnected = await connectivityController.checkConnection();
-    if (!this.isConnected) {
+    if (!this.isConnected && _first) {
+      _first = false;
       showAlert(context, context.size);
-    } else {
+    }
+    if (isConnected) {
+      Navigator.of(context).pop();
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new Splash()));
     }
-    if (tryAgain != !this.isConnected) {
-      setState(() => tryAgain = !this.isConnected);
-    } else {
-      Navigator.pop(context);
-    }
+    // if (tryAgain != !this.isConnected) {
+    //     WidgetsBinding.instance.addPostFrameCallback((_) {
+    //       setState(() => tryAgain = !this.isConnected);
+    //     });
+    //   } else {
+    //   Navigator.pop(context);
+    // }
   }
 
   void showAlert(BuildContext context, size) {
