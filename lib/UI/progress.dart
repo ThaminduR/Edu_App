@@ -1,6 +1,5 @@
 import 'package:edu_app/Controllers/connectivityController.dart';
 import 'package:edu_app/Controllers/progressController.dart';
-import 'package:edu_app/UI/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
