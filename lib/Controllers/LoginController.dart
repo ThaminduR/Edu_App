@@ -1,3 +1,4 @@
+import 'package:edu_app/Controllers/resultController.dart';
 import 'package:edu_app/UI/Onboarding/nameUI.dart';
 import 'package:edu_app/UI/home.dart';
 import 'package:edu_app/UI/splash.dart';
@@ -20,6 +21,7 @@ class LoginController {
   }
 
   Future<void> selectlogin(context) async {
+    ResultController resultController = new ResultController();
     FirebaseAuth firebaseAuth = FirebaseAuth.instance;
     FirebaseUser firebaseuser = await firebaseAuth.currentUser();
     String uid = firebaseuser.uid;
@@ -30,6 +32,7 @@ class LoginController {
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new NamePage()));
     } else {
+      await resultController.loginupload(uid);
       Navigator.of(context).pushReplacement(
           new MaterialPageRoute(builder: (context) => new HomePage()));
     }
@@ -42,6 +45,15 @@ class LoginController {
       return true;
     }
     return false;
+  }
+
+  Future<FirebaseUser> currentuser() async {
+    FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+    FirebaseUser firebaseuser = await firebaseAuth.currentUser();
+    if (firebaseuser != null) {
+      return firebaseuser;
+    }
+    return null;
   }
 
   Future<bool> usernamUnique(name) async {

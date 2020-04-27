@@ -3,6 +3,7 @@ import 'package:edu_app/Controllers/LoginController.dart';
 import 'package:edu_app/Controllers/connectivityController.dart';
 import 'package:edu_app/Controllers/resultController.dart';
 import 'package:edu_app/UI/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:edu_app/UI/Onboarding/onboarding.dart';

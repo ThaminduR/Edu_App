@@ -27,12 +27,12 @@ class DBMarks {
   });
 
   factory DBMarks.fromJson(Map<String, dynamic> json) {
-    List asFromJson = jsonDecode(json['ans']);
-    List<GivenAnswer> ansList =
-        asFromJson.map((i) => GivenAnswer.fromJson(i)).toList();
+    // List asFromJson = jsonDecode(json['ans']);
+    // List<GivenAnswer> ansList =
+    //     asFromJson.map((i) => GivenAnswer.fromJson(i)).toList();
     return DBMarks(
       id: json["paperid"],
-      ans: ansList,
+      ans: null,
       marks: json["marks"],
       upload: json["upload"],
     );
@@ -40,7 +40,8 @@ class DBMarks {
 
   Map<String, dynamic> toJson() => {
         "paperid": id,
-        "ans": jsonEncode(ans),
+        "ans": null,
+        //jsonEncode(ans),
         "marks": marks,
         "upload": upload,
       };

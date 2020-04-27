@@ -216,6 +216,28 @@ class Firebase {
     return list;
   }
 
+//this function doesn't retrieve given answers
+  Future<List<DBMarks>> getResult(user) async {
+    List list = new List<DBMarks>();
+    await firebaseReference
+        .collection('users')
+        .document(user)
+        .collection('Papers')
+        .getDocuments()
+        .then((QuerySnapshot snapshot) {
+      snapshot.documents.forEach((f) {
+        DBMarks paper = DBMarks(
+          id: f.documentID,
+          marks: f.data['correct_answers'],
+          ans: null,
+          upload: 1,
+        );
+        list.add(paper);
+      });
+    });
+    return list;
+  }
+
   Future<bool> checkUsername(name) async {
     var documents = firebaseReference.collection('users').getDocuments();
     bool isUnique = true;
