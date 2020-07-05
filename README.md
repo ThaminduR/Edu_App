@@ -1,3 +1,6 @@
-#Education App
+#Quiz App
 
-A Flutter project which enables students to receive weekly question papers.
+##A Flutter application which provides users question papers.
+-Firebase Authentication (Implemented for Sri Lankan Dialog users)
+-Child friendly UI
+-Leaderboard (Ranking Not Implemented)
