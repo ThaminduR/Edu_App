@@ -20,7 +20,7 @@ dependencies:
   flutter:
     sdk: flutter
   sqflite:
-  path:
+  path: any
   progress_dialog:
   cloud_firestore: ^0.12.9+5
   # The following adds the Cupertino Icons font to your application.
